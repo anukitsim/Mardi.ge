@@ -9,52 +9,55 @@ const Contact = () => {
     <div className="contact-page">
       {/* Hero Section */}
       <section
-        className="relative h-96 bg-fixed bg-cover bg-center"
+        className="relative min-h-[40vh] md:min-h-[60vh] bg-fixed bg-cover bg-center pt-20 flex flex-col justify-center"
         style={{
           backgroundImage: "url('/images/contact.webp')",
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
         }}
       >
         {/* Header */}
-        <header className="absolute top-0 left-0 w-full flex items-center justify-between px-16 py-6 shadow-md z-30 font-medium text-white">
+        <header className="absolute top-0 left-0 w-full flex items-center justify-between px-6 md:px-16 py-4 md:py-6 shadow-md z-30 font-medium text-white">
           <Link href="/">
-            <img src="/images/logo.svg" alt="Logo" className="h-8" />
+            <img src="/images/logo.svg" alt="Logo" className="h-6 md:h-8" />
           </Link>
-          <nav className="flex space-x-10">
+          <nav className="flex space-x-6 md:space-x-10">
             <Link
               href="/contact"
-              className="relative transition-colors duration-200 font-bold text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+              className="relative transition-colors duration-200 font-bold text-xs md:text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
             >
               Contact
             </Link>
             <Link
               href="/about"
-              className="relative transition-colors duration-200 font-bold text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+              className="relative transition-colors duration-200 font-bold text-xs md:text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
             >
               About Us
             </Link>
           </nav>
         </header>
+
         {/* Updated Overlay Gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/90 to-transparent opacity-90"></div>
 
         {/* Animated Contact Us Text */}
         <motion.div
-          className="relative z-10 text-white text-left flex flex-col justify-center ml-16 items-start h-full"
+          className="relative z-10 text-white text-left px-6 md:ml-16"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
         >
           <motion.h1
-            className="text-5xl font-bold uppercase mb-4"
+            className="text-4xl md:text-5xl font-bold uppercase mb-2 md:mb-4"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
             Contact Us
           </motion.h1>
-          
+
           <motion.p
-            className="mt-4 text-xl"
+            className="mt-2 md:mt-4 text-lg md:text-xl"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
@@ -65,11 +68,12 @@ const Contact = () => {
       </section>
 
       {/* Contact Form Section */}
-      <section className="bg-gray-100 py-16 px-16">
+      <section className="bg-gray-100 py-10 md:py-16 px-6 md:px-16">
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-start">
-          <div className="md:w-1/2 mb-10 md:mb-0">
+          {/* Left Column - Head Office */}
+          <div className="w-full md:w-1/2 mb-10 md:mb-0">
             <motion.h2
-              className="text-3xl text-[#333333] font-bold mb-4"
+              className="text-2xl md:text-3xl text-[#333333] font-bold mb-4"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.8 }}
@@ -77,6 +81,7 @@ const Contact = () => {
               Head Office
             </motion.h2>
             <motion.p
+              className="text-base md:text-lg"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1 }}
@@ -84,25 +89,27 @@ const Contact = () => {
               Mardi Holding
             </motion.p>
             <motion.p
+              className="text-base md:text-lg"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1.2 }}
             >
-              123 Main St, Batumi, Georgia
+              Batumi, Georgia
             </motion.p>
             <motion.p
-              className="mt-4"
+              className="mt-4 text-base md:text-lg"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1.4 }}
             >
-              Phone: +995-555-123456
+              Phone: +995 568 60 60 60
             </motion.p>
           </div>
 
-          <div className="md:w-1/2">
+          {/* Right Column - Get in Touch */}
+          <div className="w-full md:w-1/2">
             <motion.h2
-              className="text-3xl text-[#333333] font-bold mb-4"
+              className="text-2xl md:text-3xl text-[#333333] font-bold mb-4"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1 }}
@@ -110,12 +117,12 @@ const Contact = () => {
               Get in Touch
             </motion.h2>
             <motion.form
-              className="space-y-6 custom-form"
+              className="space-y-4 md:space-y-6 custom-form"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1.2 }}
             >
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div className="relative">
                   <input type="text" className="custom-input" placeholder="Name" />
                 </div>
@@ -130,7 +137,6 @@ const Contact = () => {
                 <textarea className="custom-input" rows="4" placeholder="Message"></textarea>
               </div>
 
-              {/* Button styled like 'button-assist-small' with updated colors */}
               <motion.button
                 type="submit"
                 className="button-assist-form border text-[#88888] border-[#808080] p-1.5 rounded"
@@ -145,7 +151,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Add custom styles */}
+      {/* Custom Styles */}
       <style jsx>{`
         .custom-input {
           border: none;
@@ -174,7 +180,7 @@ const Contact = () => {
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
           overflow: hidden;
           position: relative;
-          margin-top: 2rem;
+          margin-top: 1.5rem;
         }
 
         .button-assist-form::before {
