@@ -1,33 +1,189 @@
+@import url(https://db.onlinewebfonts.com/c/1d81cdaee5e55acbcf50ccbfc8b94122?family=Vela+Sans);
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --font-family-primary: "Vela Sans", sans-serif;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-size-h1: 40px;
+  --font-size-h2: 36px;
+  --font-size-h3: 32px;
+  --font-size-h4: 28px;
+  --font-size-h5: 24px;
+  --font-size-h6: 21px;
+  --font-size-body: 16px;
+  --font-size-small: 14px;
+  --font-size-label: 11px;
+  --line-height-tight: 1.1;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.03em;
+  --letter-spacing-normal: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+body {
+  font-family: var(--font-family-primary);
+  color: #303030; /* Default body color */
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-normal);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
+
+html {
+  line-height: 1.15;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+/* Removes unnecessary button styles for simplicity */
+
 
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    to bottom,
+    rgba(var(--background-start-rgb), 1),
+    rgba(var(--background-end-rgb), 1)
+  );
+  font-family: "Montserrat", sans-serif;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.button-assist {
+  position: absolute;
+  top: 15rem;
+  left: 0;
+  padding: 18px 32px;
+  width: 224px;
+  height: 67px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  text-transform: uppercase;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: transparent;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease,
+    box-shadow 0.4s ease, border-color 0.4s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.button-assist::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: left 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.button-assist:hover::before {
+  left: 0;
+}
+
+.button-assist:hover {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.1)
+  );
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 1);
+}
+
+.button-assist span {
+  position: relative;
+  z-index: 2;
+}
+
+.button-assist-small {
+  position: absolute;
+
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  text-transform: uppercase;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: transparent;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease,
+    box-shadow 0.4s ease, border-color 0.4s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.button-assist-small::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: left 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.button-assist-small:hover::before {
+  left: 0;
+}
+
+.button-assist-small:hover {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.1)
+  );
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 1);
+}
+
+.button-assist-small span {
+  position: relative;
+  z-index: 2;
+}
+
+.text-shadow-strong {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9); /* Stronger shadow for better contrast */
+}
+
+.text-shadow-strong {
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
+}
+
+/* Overlay effect to darken the background image on hover */
+.hover-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3),
+    rgba(0, 0, 0, 0.6)
+  );
 }
