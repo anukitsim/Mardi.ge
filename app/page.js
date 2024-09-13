@@ -6,19 +6,13 @@ import Link from "next/link";
 
 export default function Home() {
   const containerRef = useRef(null);
-  const [currentVideo, setCurrentVideo] = useState("/video1.mp4");
-  const [nextVideo, setNextVideo] = useState(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isNextVideoReady, setIsNextVideoReady] = useState(false);
-  const [isTextVisible, setIsTextVisible] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(0);
 
   const videoSources = [
     "/video1.mp4",
     "/video3.mp4",
-    "/video2.mp4",
+    "/video2.mov",
     "/video5.mp4",
-    "/video6.mp4",
+    "/video6.mov",
     "/video7.mp4",
   ];
 
@@ -40,39 +34,45 @@ export default function Home() {
     "A management company that operates to the highest standards of the hospitality industry. Our goal is to become a leading management company in Georgia, providing services and profitability comparable to international brands.",
   ];
 
+  const [currentVideo, setCurrentVideo] = useState("/video1.mp4");
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [progress, setProgress] = useState(0); // Track progress for the active thumbnail
+
   useEffect(() => {
-    if (isTransitioning && isNextVideoReady) {
-      setCurrentVideo(nextVideo);
-      setNextVideo(null);
-      setIsNextVideoReady(false);
-      setIsTransitioning(false);
-    }
-  }, [isTransitioning, isNextVideoReady, nextVideo]);
+    const interval = setInterval(() => {
+      setProgress((prevProgress) => {
+        if (prevProgress >= 100) {
+          handleNextThumbnail(); // Move to next thumbnail
+          return 0;
+        }
+        return prevProgress + 100 / 70; // 7 seconds divided into 70 steps (~100ms per step)
+      });
+    }, 100);
 
-  const handleClick = (index) => {
-    if (!isTransitioning) {
-      if (videoSources[index]) {
-        const videoElement = document.createElement("video");
-        videoElement.src = videoSources[index];
-        videoElement.muted = true;
-        videoElement.oncanplay = () => {
-          setNextVideo(videoSources[index]);
-          setIsTransitioning(true);
-          setIsNextVideoReady(true);
-          videoElement.remove();
-        };
-      } else {
-        setCurrentVideo("");
-        setNextVideo(null);
-      }
-    }
+    return () => clearInterval(interval);
+  }, [activeIndex]);
 
-    setActiveIndex(index);
-    setIsTextVisible(false);
-    setTimeout(() => setIsTextVisible(true), 50);
+  const handleNextThumbnail = () => {
+    const nextIndex = (activeIndex + 1) % videoSources.length;
+    handleClick(nextIndex);
   };
 
-  // Animation Variants for text content
+  const handleClick = (index) => {
+    if (index !== activeIndex) {
+      setCurrentVideo(videoSources[index]);
+      setActiveIndex(index);
+      setProgress(0); // Reset progress for the new active thumbnail
+
+      const container = containerRef.current;
+      const clickedThumbnail = container.children[index];
+      clickedThumbnail.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  };
+
   const slowSlideInFromLeft = {
     initial: { opacity: 0, x: -200 },
     animate: {
@@ -88,30 +88,30 @@ export default function Home() {
   };
 
   return (
-    <main className="relative w-full h-screen overflow-hidden font-primary">
-       {/* Header */}
-       <header className="absolute top-0 left-0 w-full flex items-center justify-between px-16 py-6 shadow-md z-30 font-medium text-white">
-          <Link href="/">
-            <img src="/images/logo.svg" alt="Logo" className="h-8" />
+    <main className="relative w-full min-h-screen h-screen overflow-hidden font-primary">
+      {/* Header */}
+      <header className="absolute top-0 left-0 w-full flex items-center justify-between px-[5vw] py-[2vh] shadow-md z-30 font-medium text-white">
+        <Link href="/">
+          <img src="/images/logo.svg" alt="Logo" className="h-[3vh]" />
+        </Link>
+        <nav className="flex space-x-[2vw]">
+          <Link
+            href="/contact"
+            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-0.3vw] after:h-[0.2vw] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+          >
+            Contact
           </Link>
-          <nav className="flex space-x-10">
-            <Link
-              href="/contact"
-              className="relative transition-colors duration-200 font-bold text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Contact
-            </Link>
-            <Link
-              href="/about"
-              className="relative transition-colors duration-200 font-bold text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-            >
-              About Us
-            </Link>
-          </nav>
-        </header>
+          <Link
+            href="/about"
+            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-0.3vw] after:h-[0.2vw] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+          >
+            About Us
+          </Link>
+        </nav>
+      </header>
 
       <div className="main-content absolute inset-0">
-        <div className="relative w-full h-full">
+        <div className="relative w-full h-full min-h-[100vh] flex flex-col justify-center items-center">
           <AnimatePresence initial={false}>
             {currentVideo && (
               <motion.video
@@ -139,58 +139,51 @@ export default function Home() {
             }}
           ></div>
 
-          {/* Title and description animations */}
           <AnimatePresence>
-            {isTextVisible && activeIndex !== null && (
-              <motion.div
-                key={activeIndex}
-                className="absolute left-16 top-32 pt-10 text-white z-20"
-                initial="initial"
-                animate="animate"
-                exit="exit"
+            <motion.div
+              key={activeIndex}
+              className="absolute left-[5vw] top-[18vh] text-white z-20"
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={slowSlideInFromLeft}
+            >
+              <motion.h1
+                className="text-[5vw] sm:text-[2.5vw] uppercase font-regular mb-[2vw] leading-tight tracking-tight text-shadow-strong"
                 variants={slowSlideInFromLeft}
               >
-                {/* Title */}
-                <motion.h1
-                  className="text-h1 uppercase font-regular mb-5 leading-tight tracking-tight text-shadow-strong"
-                  variants={slowSlideInFromLeft}
-                >
-                  {titles[activeIndex]}
-                </motion.h1>
+                {titles[activeIndex]}
+              </motion.h1>
 
-                {/* Description */}
-                <motion.p
-                  className="mt-2 text-body max-w-xl font-regular leading-normal tracking-wide text-shadow-strong"
-                  variants={slowSlideInFromLeft}
-                >
-                  {descriptions[activeIndex]}
-                </motion.p>
+              <motion.p
+                className="mt-[3vh] text-[4vw] sm:text-[1.2vw] max-w-[55vw] font-regular leading-normal tracking-wide text-shadow-strong"
+                variants={slowSlideInFromLeft}
+              >
+                {descriptions[activeIndex]}
+              </motion.p>
 
-                {/* Button */}
-                <motion.button
-                  className="button-assist mt-6 text-shadow"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <span className="text-white tracking-normal whitespace-nowrap leading-relaxed p-4 text-md font-semi-bold">
-                    Visit Website
-                  </span>
-                </motion.button>
-              </motion.div>
-            )}
+              <motion.button
+                className="button-assist mt-[7vh] sm:mt-[2vh]  text-shadow"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+              >
+                <span className="text-white tracking-normal whitespace-nowrap leading-relaxed px-[6vw] py-[2vh] text-[4vw] sm:text-[1.2vw]  font-semi-bold">
+                  Visit Website
+                </span>
+              </motion.button>
+            </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Thumbnails */}
         <div
           ref={containerRef}
-          className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex overflow-x-auto w-full px-5 box-border whitespace-nowrap z-20"
+          className="absolute bottom-[10vh] left-1/2 transform -translate-x-1/2 flex overflow-x-auto w-full px-[5vw] box-border whitespace-nowrap z-50 scrollbar-none gap-[3vw]"
         >
           {Array.from({ length: videoSources.length }).map((_, index) => (
             <motion.div
               key={index}
-              className={`relative inline-block w-[250px] h-[120px] mx-2 overflow-hidden rounded-md transition-shadow duration-300 ${
+              className={`relative inline-block w-[40vw] sm:w-[20vw] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${
                 activeIndex === index ? "shadow-lg" : ""
               }`}
               style={{
@@ -202,43 +195,56 @@ export default function Home() {
                 borderRadius: "15px",
               }}
               whileHover={{
-                scale: 1.02, // Slight scale on hover
-                boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)", // Subtle shadow
-                filter: "brightness(1.15)", // Slight brightness on hover
+                scale: 1.02,
+                boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
+                filter: "brightness(1.15)",
               }}
               onClick={() => handleClick(index)}
             >
-              {/* Background Image with Overlay */}
               <div
                 className="bg-image absolute inset-0 bg-cover bg-center transition-transform duration-300"
                 style={{
                   backgroundImage: `url(/images/image${index + 1}.webp)`,
-                  filter: "brightness(0.7) contrast(1.1)", // Slightly darkened background
+                  filter: "brightness(0.7) contrast(1.1)",
                 }}
               ></div>
 
-              {/* Text content with background overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-2 text-end bg-white bg-opacity-15">
-                <div className="text-white text-sm font-medium">
-                  {titles[index]}
-                </div>
+              <div className="absolute bottom-0 left-0 right-0 p-[3vw] sm:p-[1vw] text-[3.5vw] sm:text-[1vw] text-center bg-white bg-opacity-15">
+                <div className="text-white">{titles[index]}</div>
               </div>
+
+              {/* Progress bar directly below each thumbnail */}
+              {activeIndex === index && (
+                <div
+                  className="progress-bar-background absolute left-0 right-0 h-[0.4vw] z-[2000] overflow-hidden"
+                  style={{ bottom: "0vw" }} // Ensure it's placed above the bottom edge
+                >
+                  <div
+                    className="progress-bar-fill h-full"
+                    style={{
+                      width: `${progress}%`,
+                      transition: "width 0.1s linear",
+                    }}
+                  />
+                </div>
+              )}
             </motion.div>
           ))}
         </div>
       </div>
 
       <style jsx>{`
-        .transition-opacity {
-          transition: opacity 1.5s ease-in-out;
+        .scrollbar-none::-webkit-scrollbar {
+          display: none;
+        }
+
+        .scrollbar-none {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
 
         .text-shadow {
           text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        nav a.active {
-          border-bottom: 2px solid #ffffff;
         }
 
         .button-assist:hover {
@@ -248,41 +254,15 @@ export default function Home() {
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .description-text {
-          font-size: 1rem;
-          line-height: 1.5;
-        }
+        .progress-bar-background {
+    background-color: rgba(0, 0, 0, 0.3); /* Slightly darker for better contrast */
+    height: 0.4vw; /* Increased for better visibility */
+  }
 
-        .hover-overlay {
-          background: linear-gradient(
-            to bottom,
-            rgba(0, 0, 0, 0.2),
-            rgba(0, 0, 0, 0.5)
-          );
-        }
-
-        .button-assist-small {
-          padding: 0.5rem 1.5rem;
-          font-size: 0.875rem;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-          background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .button-assist-small:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-          color: #ffffff;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .scrollbar-none::-webkit-scrollbar {
-          display: none;
-        }
-
-        .scrollbar-none {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
+  .progress-bar-fill {
+    background-color: rgba(255, 255, 255, 0.8); /* Bright white fill */
+    height: 100%;
+  }
       `}</style>
     </main>
   );

@@ -189,3 +189,29 @@ body {
 }
 
 
+.thumbnail-container {
+  position: relative;
+}
+
+
+.progress-bar-background {
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+}
+
+
+
+.progress-bar-background {
+  background-color: rgba(0, 0, 0, 0.2);
+  height: 2vw; /* Temporarily increase height */
+}
+
+.progress-bar-fill {
+  background-color: white;
+  height: 100%;
+}
+
+
+.progress-bar-fill {
+  z-index: 2000;
+}
+
