@@ -11,7 +11,7 @@ const Contact = () => {
       <section
         className="relative min-h-[40vh] md:min-h-[60vh] bg-fixed bg-cover bg-center pt-20 flex flex-col justify-center"
         style={{
-          backgroundImage: "url('/images/contact.webp')",
+          backgroundImage: "url('/images/contact.jpeg')",
           backgroundSize: "cover",
           backgroundPosition: "center center",
         }}

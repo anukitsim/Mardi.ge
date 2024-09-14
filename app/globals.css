@@ -65,12 +65,11 @@ body {
 
 .button-assist {
   position: absolute;
-  top: 15rem;
-  left: 0;
-  padding: 18px 32px;
-  width: 224px;
-  height: 67px;
-  overflow: hidden;
+  top: 25vh; /* Keeps the current vertical position */
+  left: 0; /* Maintains its relative left position */
+  padding: 18px 32px; /* Maintain consistent padding */
+  width: 224px; /* Fixed width for larger screens */
+  height: auto; /* Remove fixed height for better scaling */
   border: 1px solid rgba(255, 255, 255, 0.8);
   color: rgba(255, 255, 255, 0.9);
   font-size: 14px;
@@ -85,6 +84,29 @@ body {
     box-shadow 0.4s ease, border-color 0.4s ease;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
+
+/* Media Query for tablet screens */
+@media (max-width: 1024px) {
+  .button-assist {
+    top: 55vh; /* Keeps it responsive for smaller screens */
+    left: 5vw;
+    width: 200px; /* Slightly reduce button width */
+    font-size: 13px; /* Adjust font size for better readability */
+    padding: 16px 28px; /* Reduce padding */
+  }
+}
+
+/* Media Query for mobile screens */
+@media (max-width: 768px) {
+  .button-assist {
+    top: 30vh; /* Keeps the top position for mobile */
+    left: 0;
+    width: 180px; /* Further reduce the width for mobile */
+    font-size: 12px; /* Smaller font for mobile screens */
+    padding: 14px 24px; /* Smaller padding for mobile */
+  }
+}
+
 
 .button-assist::before {
   content: "";
@@ -118,6 +140,27 @@ body {
   position: relative;
   z-index: 2;
 }
+
+
+/* General styling for description text */
+.description {
+  max-width: 55vw; /* Original width for larger screens */
+  font-size: 1.2vw;
+}
+
+/* Media Query for mobile screens */
+@media (max-width: 768px) {
+  .description {
+    max-width: 90vw; /* Increase width for mobile screens */
+    font-size: 4vw;   /* Adjust font size for readability */
+   
+  }
+}
+
+
+
+/* small button */
+
 
 .button-assist-small {
   position: absolute;

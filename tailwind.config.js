@@ -36,6 +36,12 @@ module.exports = {
         tight: "-0.03em",
         normal: "0",
       },
+      // Add custom screen here
+      screens: {
+        // Existing breakpoints are preserved
+        // Add the custom breakpoint
+        'galaxy-fold': { 'raw': '(width: 768px) and (height: 946px)' },
+      },
     },
   },
   plugins: [],

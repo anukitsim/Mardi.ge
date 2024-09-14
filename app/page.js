@@ -3,17 +3,37 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
+import VideoPlayer from "./components/VideoPlayer";
 
 export default function Home() {
   const containerRef = useRef(null);
 
   const videoSources = [
-    "/video1.mp4",
-    "/video3.mp4",
-    "/video2.mov",
-    "/video5.mp4",
-    "/video6.mov",
-    "/video7.mp4",
+    {
+      webm: "/videos/video1.webm",
+      mp4: "/videos/video1.mp4",
+    },
+    {
+      webm: "/videos/video3.webm",
+      mp4: "/videos/video3.mp4",
+    },
+    {
+      webm: "/videos/video2.webm",
+      mp4: "/videos/video2.mp4",
+    },
+    {
+      webm: "/videos/video5.webm",
+      mp4: "/videos/video5.mp4",
+    },
+    {
+      webm: "/videos/video6.webm",
+      mp4: "/videos/video6.mp4",
+    },
+    {
+      webm: "/videos/video7.webm",
+      mp4: "/videos/video7.mp4",
+    },
   ];
 
   const titles = [
@@ -22,35 +42,48 @@ export default function Home() {
     "Mardi Travel Lab",
     "Mardi Energy",
     "Mardi Wine & Cigar",
-    "Mardi Comfort (Hospitality)",
+    "Mardi Comfort",
   ];
 
   const descriptions = [
-    "Building high-class projects in collaboration with international hotel brands and management companies. Our goal is to create premium hotels with high-quality services. You can own profitable real estate with us, from apartments to townhouses.",
-    "The Adjarian Wine House is a notable landmark in Adjara, cultivating the unique Chkhaveri grape. Here, you can taste our exceptional Georgian wines, learn about winemaking history, and enjoy delicious food. [Learn more](https://awh.ge/)",
-    "Mardi Travel Lab is a tourism company that showcases the stunning beauty of Georgia.",
+    "Creating premium hotels in partnership with top international brands. Invest in high-quality real estate, from luxury apartments to townhouses.",
+    "Discover Adjarian Wine House, home to the unique Chkhaveri grape. Enjoy Georgian wines, explore winemaking history, and enjoy delicious cuisine.",
+    "Explore the beauty of Georgia with Mardi Travel Lab, your guide to authentic travel experiences.",
     "Cascade of hydropower plants on the Khokhniskali River, Keda.",
-    "Production of Porto Franco wine and cigarettes from tobacco grown in Georgia and wrapped using classic Cuban technology.",
-    "A management company that operates to the highest standards of the hospitality industry. Our goal is to become a leading management company in Georgia, providing services and profitability comparable to international brands.",
+    "Producing Porto Franco wine and Georgian-grown tobacco, crafted with traditional Cuban techniques.",
+    "Aiming to be Georgia’s top hospitality management company, delivering services and profitability matching international standards.",
   ];
 
-  const [currentVideo, setCurrentVideo] = useState("/video1.mp4");
+  const urls = [
+    "https://www.mardi.ge/",
+    "https://awh.ge/en",
+    "https://travelab.ge/",
+    "/in-development",
+    "https://cigar.ge/",
+    "/in-development",
+  ];
+
+  const [currentVideo, setCurrentVideo] = useState(videoSources[0]);
+  const [prevVideo, setPrevVideo] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [progress, setProgress] = useState(0); // Track progress for the active thumbnail
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        if (prevProgress >= 100) {
-          handleNextThumbnail(); // Move to next thumbnail
-          return 0;
-        }
-        return prevProgress + 100 / 70; // 7 seconds divided into 70 steps (~100ms per step)
-      });
-    }, 100);
+    const timer = setTimeout(() => {
+      handleNextThumbnail();
+    }, 10000); // 10 seconds
 
-    return () => clearInterval(interval);
+    return () => clearTimeout(timer);
   }, [activeIndex]);
+
+  useEffect(() => {
+    if (prevVideo) {
+      const timeout = setTimeout(() => {
+        setPrevVideo(null); // Clear the previous video after 1 second (transition duration)
+      }, 1000);
+      return () => clearTimeout(timeout); // Clean up timeout on unmount
+    }
+  }, [prevVideo]);
+  
 
   const handleNextThumbnail = () => {
     const nextIndex = (activeIndex + 1) % videoSources.length;
@@ -59,10 +92,10 @@ export default function Home() {
 
   const handleClick = (index) => {
     if (index !== activeIndex) {
+      setPrevVideo(currentVideo); // Set the previous video before changing
       setCurrentVideo(videoSources[index]);
       setActiveIndex(index);
-      setProgress(0); // Reset progress for the new active thumbnail
-
+  
       const container = containerRef.current;
       const clickedThumbnail = container.children[index];
       clickedThumbnail.scrollIntoView({
@@ -72,6 +105,7 @@ export default function Home() {
       });
     }
   };
+  
 
   const slowSlideInFromLeft = {
     initial: { opacity: 0, x: -200 },
@@ -112,25 +146,52 @@ export default function Home() {
 
       <div className="main-content absolute inset-0">
         <div className="relative w-full h-full min-h-[100vh] flex flex-col justify-center items-center">
-          <AnimatePresence initial={false}>
-            {currentVideo && (
-              <motion.video
-                key={currentVideo}
-                className="absolute top-0 left-0 w-full h-full object-cover"
-                src={currentVideo}
-                autoPlay
-                muted
-                loop
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1 }}
-                style={{
-                  filter: "brightness(100%) contrast(105%) saturate(100%)",
-                }}
-              />
-            )}
-          </AnimatePresence>
+        <AnimatePresence initial={false}>
+  {prevVideo && (
+    <motion.div
+      key={prevVideo.webm} // Unique key for framer-motion to handle transitions
+      className="absolute top-0 left-0 w-full h-full"
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1 }} // Fade out smoothly
+    >
+      <VideoPlayer
+        sources={prevVideo}
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        autoPlay
+        muted
+        loop
+        style={{
+          filter: "brightness(100%) contrast(105%) saturate(100%)",
+        }}
+      />
+    </motion.div>
+  )}
+
+  {currentVideo && (
+    <motion.div
+      key={currentVideo.webm} // Unique key for framer-motion
+      className="absolute top-0 left-0 w-full h-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1 }} // Fade in smoothly
+    >
+      <VideoPlayer
+        sources={currentVideo}
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        autoPlay
+        muted
+        loop
+        style={{
+          filter: "brightness(100%) contrast(105%) saturate(100%)",
+        }}
+      />
+    </motion.div>
+  )}
+</AnimatePresence>
+
           <div
             className="overlay absolute inset-0"
             style={{
@@ -156,21 +217,27 @@ export default function Home() {
               </motion.h1>
 
               <motion.p
-                className="mt-[3vh] text-[4vw] sm:text-[1.2vw] max-w-[55vw] font-regular leading-normal tracking-wide text-shadow-strong"
+                className="description mt-[3vh] text-[4vw] sm:text-[1.2vw] max-w-[55vw] font-regular leading-normal tracking-wide text-shadow-strong"
                 variants={slowSlideInFromLeft}
               >
                 {descriptions[activeIndex]}
               </motion.p>
 
               <motion.button
-                className="button-assist mt-[7vh] sm:mt-[2vh]  text-shadow"
+                className="button-assist mb-[5vh] text-shadow"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ duration: 0.3 }}
               >
-                <span className="text-white tracking-normal whitespace-nowrap leading-relaxed px-[6vw] py-[2vh] text-[4vw] sm:text-[1.2vw]  font-semi-bold">
-                  Visit Website
-                </span>
+                <Link
+                  href={urls[activeIndex]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="text-white tracking-normal whitespace-nowrap leading-relaxed px-[6vw] py-[2vh] text-[4vw] sm:text-[1.2vw] font-semi-bold">
+                    Visit Website
+                  </span>
+                </Link>
               </motion.button>
             </motion.div>
           </AnimatePresence>
@@ -201,31 +268,28 @@ export default function Home() {
               }}
               onClick={() => handleClick(index)}
             >
-              <div
-                className="bg-image absolute inset-0 bg-cover bg-center transition-transform duration-300"
+              <Image
+                src={`/images/image${index + 1}.webp`}
+                alt={titles[index]}
+                fill
+                sizes="(max-width: 640px) 40vw, (max-width: 1024px) 20vw, 10vw"
+                priority={index === 0}
                 style={{
-                  backgroundImage: `url(/images/image${index + 1}.webp)`,
+                  objectFit: "cover",
                   filter: "brightness(0.7) contrast(1.1)",
                 }}
-              ></div>
+              />
 
               <div className="absolute bottom-0 left-0 right-0 p-[3vw] sm:p-[1vw] text-[3.5vw] sm:text-[1vw] text-center bg-white bg-opacity-15">
-                <div className="text-white">{titles[index]}</div>
+                <div className="text-white text-right">{titles[index]}</div>
               </div>
 
-              {/* Progress bar directly below each thumbnail */}
               {activeIndex === index && (
                 <div
                   className="progress-bar-background absolute left-0 right-0 h-[0.4vw] z-[2000] overflow-hidden"
-                  style={{ bottom: "0vw" }} // Ensure it's placed above the bottom edge
+                  style={{ bottom: "0vw" }}
                 >
-                  <div
-                    className="progress-bar-fill h-full"
-                    style={{
-                      width: `${progress}%`,
-                      transition: "width 0.1s linear",
-                    }}
-                  />
+                  <div className="progress-bar-fill h-full" />
                 </div>
               )}
             </motion.div>
@@ -255,14 +319,25 @@ export default function Home() {
         }
 
         .progress-bar-background {
-    background-color: rgba(0, 0, 0, 0.3); /* Slightly darker for better contrast */
-    height: 0.4vw; /* Increased for better visibility */
-  }
+          background-color: rgba(0, 0, 0, 0.3);
+          height: 0.4vw;
+        }
 
-  .progress-bar-fill {
-    background-color: rgba(255, 255, 255, 0.8); /* Bright white fill */
-    height: 100%;
-  }
+        .progress-bar-fill {
+          background-color: rgba(255, 255, 255, 0.8);
+          height: 100%;
+          width: 100%;
+          animation: progressBar 10s linear forwards;
+        }
+
+        @keyframes progressBar {
+          from {
+            width: 0%;
+          }
+          to {
+            width: 100%;
+          }
+        }
       `}</style>
     </main>
   );

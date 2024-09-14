@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const About = () => {
   const [visibleSections, setVisibleSections] = useState({
@@ -13,7 +12,6 @@ const About = () => {
     section3: false,
     section4: false,
     section5: false,
-    section6: false,
   });
 
   const sectionRefs = useRef({
@@ -22,7 +20,6 @@ const About = () => {
     section3: null,
     section4: null,
     section5: null,
-    section6: null,
   });
 
   const pathname = usePathname();
@@ -54,12 +51,11 @@ const About = () => {
 
   return (
     <main className="relative w-full overflow-hidden font-primary">
-      {/* First Section */}
+      {/* Section 1: Hero Section with parallax */}
       <section
-        className="min-h-[100vh] bg-cover bg-center relative px-4 sm:px-6 md:px-16 py-20"
+        className="min-h-[100vh] w-full bg-cover bg-center relative flex items-center justify-center lg:bg-fixed"
         style={{
           backgroundImage: "url('/images/about-poster.jpg')",
-          backgroundAttachment: "fixed",
         }}
         ref={(el) => (sectionRefs.current.section1 = el)}
         data-section="section1"
@@ -67,7 +63,11 @@ const About = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
         <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
           <Link href="/">
-            <img src="/images/logo.svg" alt="Logo" className="h-6 sm:h-7 md:h-8" />
+            <img
+              src="/images/logo.svg"
+              alt="Logo"
+              className="h-6 sm:h-7 md:h-8"
+            />
           </Link>
           <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
             <Link
@@ -87,7 +87,6 @@ const About = () => {
           </nav>
         </header>
 
-        {/* Animated Text */}
         <motion.div
           className="absolute inset-0 flex flex-col justify-center px-4 sm:px-6 md:px-16"
           initial="hidden"
@@ -108,7 +107,7 @@ const About = () => {
             }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            About Us
+            About us
           </motion.h2>
           <motion.h2
             className="mt-2 sm:mt-3 md:mt-4 text-lg sm:text-xl md:text-2xl text-shadow-strong font-light text-white text-opacity-80"
@@ -118,358 +117,265 @@ const About = () => {
             }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            Mardi Holding
+            MARDI HOLDING
           </motion.h2>
         </motion.div>
       </section>
 
-      {/* Second Section */}
+      {/* Section 2: Story and Values */}
       <section
-        className="relative min-h-[100vh] bg-[#f5f5f5] text-[#808080] flex flex-col justify-center items-center px-4 sm:px-6 md:px-16 py-10 md:py-20"
+        className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white"
         ref={(el) => (sectionRefs.current.section2 = el)}
         data-section="section2"
       >
         <motion.div
-          className="w-full h-full flex flex-col items-center"
+          className="flex flex-col lg:mt-[10vh] sm:mt-5 mx-auto max-w-10/12"
           initial="hidden"
           animate={visibleSections.section2 ? "visible" : "hidden"}
           variants={{
             visible: {
               transition: {
-                staggerChildren: 0.3,
+                staggerChildren: 0.5,
               },
             },
           }}
         >
           <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl text-[#333333] font-primary font-bold mb-8 sm:mb-10 md:mb-20 text-center"
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-10 lg:mb-20"
             variants={{
-              hidden: { opacity: 0, y: 50, scale: 0.95 },
-              visible: { opacity: 1, y: 0, scale: 1 },
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0 },
             }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            Company Overview
+            Our Story
           </motion.h2>
-
-          <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 w-full max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-center items-start space-y-8 md:space-y-0 md:space-x-12">
             <motion.div
-              className="w-full text-justify"
+              className="md:w-1/2 pr-4"
               variants={{
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{ duration: 1, ease: "easeOut" }}
             >
-              <h3 className="text-2xl sm:text-3xl font-primary font-bold mb-4 text-center sm:text-left">
-                Building and Development Company
-              </h3>
-              <p className="text-sm sm:text-base md:text-lg font-primary leading-relaxed">
-                Mardi Holding is a construction and development company that unifies construction, architectural, tourism, transportation, and real estate companies, along with wine and cigar factories, as well as hotel and restaurant complexes.
+              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed galaxy-fold:text-balanced tracking-normal">
+                Mardi Holding is a construction and development company that
+                unifies construction, architectural, tourism, transportation and
+                real estate companies, wine and cigar factories, as well as
+                hotel and restaurant complexes. The history of the holding dates
+                back to the 1990s, when two friends founded the Mardi fast food
+                cafe.
               </p>
             </motion.div>
-
             <motion.div
-              className="w-full text-justify"
+              className="md:w-1/2"
               variants={{
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{ duration: 1, ease: "easeOut" }}
             >
-              <h3 className="text-2xl sm:text-3xl font-primary font-bold mb-4 text-center sm:text-left">
-                Historical Background
-              </h3>
-              <p className="text-sm sm:text-base md:text-lg font-primary leading-relaxed">
-                The history of the holding dates back to the 1990s, when two friends founded the Mardi fast food cafe. Mardi offered healthy and delicious pastries to Batumi students at an affordable price. Years later, this success became the foundation for a bigger challenge—the establishment of "Mardi Holding" construction and development company.
+              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
+                Mardi offered healthy and delicious pastry to Batumi students
+                for an affordable price. Years later, this success became the
+                basis for a bigger challenge - to establish "Mardi Holding"
+                construction and development company. With a full Georgian
+                capital and hardworking team of professionals it stands on one
+                of the leading positions in the Georgian market today.
               </p>
             </motion.div>
-          </motion.div>
+          </div>
         </motion.div>
       </section>
 
-      {/* Third Section */}
-      <section
-        className="relative min-h-[100vh] bg-cover bg-center text-[#808080] px-4 sm:px-6 md:px-16 py-10 md:py-20"
-        style={{
-          backgroundImage: "url('/images/mardiplaza2.jpg')",
-          backgroundAttachment: "fixed",
-        }}
-        ref={(el) => (sectionRefs.current.section3 = el)}
-        data-section="section3"
-      >
-        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
-        <motion.div
-          className="relative z-10 flex flex-col justify-center items-start h-full px-4 sm:px-6 md:px-16"
-          initial="hidden"
-          animate={visibleSections.section3 ? "visible" : "hidden"}
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.3,
-              },
-            },
-          }}
-        >
-          <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl text-shadow-strong font-bold mb-8 text-white"
-            variants={{
-              hidden: { opacity: 0, y: 50, scale: 0.95 },
-              visible: { opacity: 1, y: 0, scale: 1 },
-            }}
-            transition={{ duration: 1, ease: "easeOut" }}
-          >
-            Business Operations
-          </motion.h2>
+      {/* another sections */}
 
-          <motion.div
-            className="w-full md:w-1/2 text-left text-lg"
-            variants={{
-              hidden: { opacity: 0, y: 50 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 1, ease: "easeOut" }}
-          >
-            <h3 className="text-xl sm:text-2xl text-shadow-strong font-bold mb-4 text-white">
-              Core Business and Services
-            </h3>
-            <p className="leading-relaxed text-white">
-              The main business focus of Mardi Holding is construction and
-              development. Facilities under construction are located in Batumi,
-              Tbilisi, and Bakuriani. Mardi offers customers both residential
-              and apart-hotel services in both under-construction and completed
-              hospitality complexes. Customers are guaranteed an income of 7.0%
-              from the value of the apart-hotel from the date of purchase.
-            </p>
-          </motion.div>
-        </motion.div>
-      </section>
-
-      {/* Fourth Section */}
       <section
-        className="relative min-h-[100vh] bg-cover bg-center text-[#808080] px-4 sm:px-6 md:px-16 py-10 md:py-20"
-        style={{
-          backgroundImage: "url('/images/mardiplaza1.jpg')",
-          backgroundAttachment: "fixed",
-        }}
-        ref={(el) => (sectionRefs.current.section4 = el)}
-        data-section="section4"
-      >
-        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
-        <motion.div
-          className="relative z-10 flex flex-col items-end h-full px-4 sm:px-6 md:px-16"
-          initial="hidden"
-          animate={visibleSections.section4 ? "visible" : "hidden"}
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.3,
-              },
-            },
-          }}
-        >
-          <motion.div
-            className="w-full md:w-1/2 text-left text-lg"
-            variants={{
-              hidden: { opacity: 0, y: 50 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 1, ease: "easeOut" }}
-          >
-            <h3 className="text-xl sm:text-2xl text-shadow-strong font-bold mb-4 text-white">
-              Major Projects
-            </h3>
-            <p className="leading-relaxed text-white">
-              Mardi Holding owns one of the largest recreational complexes
-              located in the center of Batumi—Mardi Plaza. This includes a
-              42-room four-star hotel, Olympic pool, and shopping center. Plaza
-              Pool is the only Olympic pool in western Georgia that meets
-              European standards, offering customers a clean and healthy
-              environment.
-            </p>
-          </motion.div>
-        </motion.div>
-      </section>
-
-      {/* Fifth Section */}
-      <section
-        className="relative min-h-[100vh] bg-gray-100 text-[#808080] flex flex-col justify-center items-center px-4 sm:px-6 md:px-16 py-10 md:py-20"
+        className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white"
         ref={(el) => (sectionRefs.current.section5 = el)}
         data-section="section5"
       >
         <motion.div
-          className="w-full h-full flex flex-col items-center"
+          className="flex flex-col lg:mt-[10vh] mt-0 mx-auto max-w-10/12"
           initial="hidden"
           animate={visibleSections.section5 ? "visible" : "hidden"}
           variants={{
             visible: {
               transition: {
-                staggerChildren: 0.3,
+                staggerChildren: 0.5,
               },
             },
           }}
         >
           <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl text-[#333333] font-primary font-bold mb-8 sm:mb-10 md:mb-20 text-center"
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-10 lg:mb-20"
             variants={{
-              hidden: { opacity: 0, y: 50, scale: 0.95 },
-              visible: { opacity: 1, y: 0, scale: 1 },
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0 },
             }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            Subsidiaries and Brands
+            Construction & Development
           </motion.h2>
-
-          <motion.div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 w-full max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-start space-y-8 md:space-y-0 md:space-x-12">
             <motion.div
-              className="relative w-full text-justify p-10 rounded-lg overflow-hidden"
-              style={{
-                backgroundImage: "url('/images/image5aaa.webp')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
+              className="md:w-1/3 pr-4 galaxy-fold:w-full"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 },
               }}
-              initial={{ opacity: 0, x: -100 }}
-              animate={{
-                opacity: visibleSections.section5 ? 1 : 0,
-                x: visibleSections.section5 ? 0 : -100,
-              }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              transition={{ duration: 1, ease: "easeOut" }}
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-90"></div>
-              <div className="relative z-10">
-                <motion.h3
-                  className="text-2xl sm:text-3xl text-shadow-strong font-bold mb-4 text-white text-center sm:text-left"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{
-                    opacity: visibleSections.section5 ? 1 : 0,
-                    y: visibleSections.section5 ? 0 : 20,
-                  }}
-                  transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
-                >
-                  Imeri
-                </motion.h3>
-                <motion.p
-                  className="text-sm sm:text-base md:text-lg text-shadow-strong text-white leading-relaxed"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{
-                    opacity: visibleSections.section5 ? 1 : 0,
-                    y: visibleSections.section5 ? 0 : 20,
-                  }}
-                  transition={{ duration: 1, ease: "easeOut", delay: 0.7 }}
-                >
-                  The holding's subsidiary, "Imeri," is the first producer of Georgian cigars. It produces 29 sorts of cigars and cigarillos made from tobacco leaves grown in Adjara, Keda.
-                </motion.p>
-              </div>
+              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
+                The main field of business of Mardi Holding is construction and
+                development. The facilities under construction are located in
+                Batumi, Tbilisi and Bakuriani. Mardi offers customers both
+                residential and apart-hotel services in both under construction
+                and completed hospitality complexes.
+              </p>
             </motion.div>
-
             <motion.div
-              className="relative w-full text-justify p-10 rounded-lg overflow-hidden"
-              style={{
-                backgroundImage: "url('/images/lala.webp')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
+              className="md:w-1/2"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 },
               }}
-              initial={{ opacity: 0, x: -100 }}
-              animate={{
-                opacity: visibleSections.section5 ? 1 : 0,
-                x: visibleSections.section5 ? 0 : -100,
-              }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-90"></div>
-              <div className="relative z-10">
-                <motion.h3
-                  className="text-2xl sm:text-3xl text-shadow-strong font-bold mb-4 text-white text-center sm:text-left"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{
-                    opacity: visibleSections.section5 ? 1 : 0,
-                    y: visibleSections.section5 ? 0 : 20,
-                  }}
-                  transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
-                >
-                  Adjara Wine House
-                </motion.h3>
-                <motion.p
-                  className="text-sm sm:text-base md:text-lg text-shadow-strong text-white leading-relaxed"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{
-                    opacity: visibleSections.section5 ? 1 : 0,
-                    y: visibleSections.section5 ? 0 : 20,
-                  }}
-                  transition={{ duration: 1, ease: "easeOut", delay: 0.7 }}
-                >
-                  Adjara Wine House is a chateau-style restaurant and winery offering a blend of traditional Georgian wines and cuisine. It includes a museum, enotheque, and cellar, where you can taste and purchase rare, locally produced wines, including the unique Chkhaveri variety.
-                </motion.p>
-              </div>
-            </motion.div>
-          </motion.div>
+              transition={{ duration: 1, ease: "easeOut" }}
+            ></motion.div>
+          </div>
         </motion.div>
       </section>
 
-      {/* Sixth Section */}
+      {/* Section 3: Parallax background with two text sections */}
       <section
-        className="relative min-h-[50vh] bg-[#f5f5f5] text-[#808080] flex flex-col justify-start items-start px-4 sm:px-6 md:px-16 py-10 md:py-20"
-        ref={(el) => (sectionRefs.current.section6 = el)}
-        data-section="section6"
+        className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white"
+        ref={(el) => (sectionRefs.current.section3 = el)}
+        data-section="section3"
       >
         <motion.div
-          className="w-full h-full flex flex-col justify-start items-start "
+          className="flex flex-col mx-auto max-w-10/12"
           initial="hidden"
-          animate={visibleSections.section6 ? "visible" : "hidden"}
+          animate={visibleSections.section3 ? "visible" : "hidden"}
           variants={{
             visible: {
               transition: {
-                staggerChildren: 0.3,
+                staggerChildren: 0.5,
+              },
+            },
+          }}
+        >
+          <div className="flex flex-col items-start space-y-12">
+            {/* First motion div with stronger gradient overlay */}
+            <motion.div
+              className="w-full h-[85vh] flex justify-start items-center relative text-white bg-cover bg-no-repeat bg-center lg:bg-fixed"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              style={{
+                backgroundImage: "url('/images/cigarr.jpeg')",
+                backgroundPosition: "end",
+              }}
+            >
+              {/* Stronger gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
+
+              <p className="relative galaxy-fold:w-full z-10 text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left p-10 leading-relaxed tracking-normal">
+                The holding daughter company "Imeri" is the first producer of
+                Georgian cigars. 29 sorts of cigars and cigarillas are produced
+                from tobacco leaves grown in Adjara, Keda.
+              </p>
+            </motion.div>
+
+            {/* Second motion div with stronger gradient overlay */}
+            <motion.div
+              className="w-full h-[85vh] p-10 flex justify-end items-center relative text-white bg-cover bg-no-repeat bg-center lg:bg-fixed"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              style={{
+                backgroundImage: "url('/images/wine.webp')",
+                backgroundPosition: "start",
+              }}
+            >
+              {/* Stronger gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
+
+              <p className="relative z-10 galaxy-fold:w-full text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left leading-relaxed tracking-normal">
+                outstanding brand of the company is "Adjara Wine House", a
+                chateau-type restaurant, which includes a winery, enotheque,
+                ethnographic museum, cellar and a restaurant. Here, in the
+                beautiful nature, by the river, you will get acquainted with the
+                ancient Georgian traditions, taste the most delicious wine and
+                Georgian dishes; You will learn the technologies of grape
+                growing and wine production. Only here you can taste and buy
+                locally produced wines, which are distinguished by their
+                uniqueness, traditional production technologies.
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Final Section without background image */}
+      <section
+        className="min-h-[50vh] px-4 sm:px-2 md:px-16 lg:py-20 bg-white"
+        ref={(el) => (sectionRefs.current.section4 = el)}
+        data-section="section4"
+      >
+        <motion.div
+          className="flex flex-col mx-auto max-w-10/12"
+          initial="hidden"
+          animate={visibleSections.section4 ? "visible" : "hidden"}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.5,
               },
             },
           }}
         >
           <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl font-primary font-bold mb-8 sm:mb-10 md:mb-20 text-left"
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-right mb-5 lg:mb-10"
             variants={{
-              hidden: { opacity: 0, y: 50, scale: 0.95 },
-              visible: { opacity: 1, y: 0, scale: 1 },
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0 },
             }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
             Company Vision and Goals
           </motion.h2>
-
-          <motion.p
-            className="text-sm sm:text-base md:text-lg text-left leading-relaxed max-w-3xl mb-10"
-            variants={{
-              hidden: { opacity: 0, y: 50 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 1, ease: "easeOut" }}
-          >
-            Mardi Holding is led by a young, creative, and professional team
-            with the goal of offering a wide variety of high-quality products.
-            The company's mission is rooted in environmental protection and the
-            economic development of the region. Mardi Holding aims to provide
-            employment opportunities and attract local and foreign investments
-            in Adjara, ultimately contributing to the well-being of the local
-            population.
-          </motion.p>
-
-          <motion.div
-            className="flex justify-start items-start mt-10"
-            variants={{
-              hidden: { opacity: 0, y: 50 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 1, ease: "easeOut" }}
-          >
-            <Image
-              src="/images/logo.svg"
-              alt="Mardi Holding Logo"
-              width={150}
-              height={150}
-              className="opacity-90"
-            />
-          </motion.div>
+          <div className="flex flex-col md:flex-row justify-between items-start space-y-8 md:space-y-0 md:space-x-12">
+            <motion.div
+              className="md:w-1/3 pr-4"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            ></motion.div>
+            <motion.div
+              className="md:w-1/2 pl-4 galaxy-fold:w-full"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            >
+              <p className="text-base galaxy-fold:w-full sm:text-lg md:text-xl text-right leading-relaxed tracking-normal">
+                Mardi Holding is led by a young, creative and professional team,
+                which aims to offer customers a big variety of quality products;
+                Our starting point is the protection of the environment and the
+                economic development of the region. We aim to provide employment
+                spots and ensure local and foreign investments in Adjara, which
+                contributes to the well-being of the population.
+              </p>
+            </motion.div>
+          </div>
         </motion.div>
       </section>
     </main>
