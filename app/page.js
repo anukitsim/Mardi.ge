@@ -13,26 +13,32 @@ export default function Home() {
     {
       webm: "/videos/video1.webm",
       mp4: "/videos/video1.mp4",
+      poster: "/images/poster1.jpg",  // Adding a poster image
     },
     {
       webm: "/videos/video3.webm",
       mp4: "/videos/video3.mp4",
+      poster: "/images/poster2.jpg",  // Adding a poster image
     },
     {
       webm: "/videos/video2.webm",
       mp4: "/videos/video2.mp4",
+      poster: "/images/poster3.jpg",  // Adding a poster image
     },
     {
       webm: "/videos/video5.webm",
       mp4: "/videos/video5.mp4",
+      poster: "/images/poster4.jpg",  // Adding a poster image
     },
     {
       webm: "/videos/video6.webm",
       mp4: "/videos/video6.mp4",
+      poster: "/images/poster5.jpg",  // Adding a poster image
     },
     {
       webm: "/videos/video7.webm",
       mp4: "/videos/video7.mp4",
+      poster: "/images/poster6.jpg",  // Adding a poster image
     },
   ];
 
@@ -105,7 +111,6 @@ export default function Home() {
       });
     }
   };
-  
 
   const slowSlideInFromLeft = {
     initial: { opacity: 0, x: -200 },
@@ -115,7 +120,7 @@ export default function Home() {
       transition: { duration: 1.5, ease: "easeOut" },
     },
     exit: {
-      opacity: 0,
+      opacity: 0, 
       x: -200,
       transition: { duration: 0.7, ease: "easeIn" },
     },
@@ -162,6 +167,7 @@ export default function Home() {
         autoPlay
         muted
         loop
+        preload="auto"  // Ensure videos are preloaded
         style={{
           filter: "brightness(100%) contrast(105%) saturate(100%)",
         }}
@@ -184,6 +190,7 @@ export default function Home() {
         autoPlay
         muted
         loop
+        preload="auto" // Ensure videos are preloaded
         style={{
           filter: "brightness(100%) contrast(105%) saturate(100%)",
         }}
