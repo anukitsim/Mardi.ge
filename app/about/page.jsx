@@ -189,8 +189,7 @@ const About = () => {
         </motion.div>
       </section>
 
-      {/* another sections */}
-
+      {/* Section 4: Construction & Development */}
       <section
         className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white"
         ref={(el) => (sectionRefs.current.section5 = el)}
@@ -220,7 +219,7 @@ const About = () => {
           </motion.h2>
           <div className="flex flex-col md:flex-row justify-between items-start space-y-8 md:space-y-0 md:space-x-12">
             <motion.div
-              className="md:w-1/3 pr-4 galaxy-fold:w-full"
+              className="md:w-1/2 pr-4 galaxy-fold:w-full"
               variants={{
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 },
@@ -230,19 +229,11 @@ const About = () => {
               <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
                 The main field of business of Mardi Holding is construction and
                 development. The facilities under construction are located in
-                Batumi, Tbilisi and Bakuriani. Mardi offers customers both
-                residential and apart-hotel services in both under construction
+                Batumi, Tbilisi, and Bakuriani. Mardi offers customers both
+                residential and apart-hotel services in both under-construction
                 and completed hospitality complexes.
               </p>
             </motion.div>
-            <motion.div
-              className="md:w-1/2"
-              variants={{
-                hidden: { opacity: 0, y: 50 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 1, ease: "easeOut" }}
-            ></motion.div>
           </div>
         </motion.div>
       </section>
@@ -306,9 +297,9 @@ const About = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
 
               <p className="relative z-10 galaxy-fold:w-full text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left leading-relaxed tracking-normal">
-                outstanding brand of the company is "Adjara Wine House", a
+                The outstanding brand of the company is "Adjara Wine House", a
                 chateau-type restaurant, which includes a winery, enotheque,
-                ethnographic museum, cellar and a restaurant. Here, in the
+                ethnographic museum, cellar, and a restaurant. Here, in the
                 beautiful nature, by the river, you will get acquainted with the
                 ancient Georgian traditions, taste the most delicious wine and
                 Georgian dishes; You will learn the technologies of grape
@@ -320,6 +311,8 @@ const About = () => {
           </div>
         </motion.div>
       </section>
+
+      
 
       {/* Final Section without background image */}
       <section
@@ -340,7 +333,7 @@ const About = () => {
           }}
         >
           <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-right mb-5 lg:mb-10"
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-5 lg:mb-10"
             variants={{
               hidden: { opacity: 0, x: -50 },
               visible: { opacity: 1, x: 0 },
@@ -349,24 +342,16 @@ const About = () => {
           >
             Company Vision and Goals
           </motion.h2>
-          <div className="flex flex-col md:flex-row justify-between items-start space-y-8 md:space-y-0 md:space-x-12">
+          <div className="flex flex-col md:flex-row justify-start items-start space-y-8 md:space-y-0 md:space-x-12">
             <motion.div
-              className="md:w-1/3 pr-4"
-              variants={{
-                hidden: { opacity: 0, y: 50 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 1, ease: "easeOut" }}
-            ></motion.div>
-            <motion.div
-              className="md:w-1/2 pl-4 galaxy-fold:w-full"
+              className="md:w-1/2 pr-4"
               variants={{
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{ duration: 1, ease: "easeOut" }}
             >
-              <p className="text-base galaxy-fold:w-full sm:text-lg md:text-xl text-right leading-relaxed tracking-normal">
+              <p className="text-base galaxy-fold:w-full sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
                 Mardi Holding is led by a young, creative and professional team,
                 which aims to offer customers a big variety of quality products;
                 Our starting point is the protection of the environment and the

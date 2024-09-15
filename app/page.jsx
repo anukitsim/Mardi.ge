@@ -23,7 +23,7 @@ export default function Home() {
       hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/0277dfb0898223f82c258c0a2d881bce/manifest/video.m3u8",
     },
     {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/c5754dddf6541ec9ddbd434c356616d4/manifest/video.m3u8",
+      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/4eba15fa3952112976869172831b4c3f/manifest/video.m3u8",
     },
     {
       hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/3a53346ff334a41d95699aaced9184bd/manifest/video.m3u8",
@@ -134,26 +134,29 @@ export default function Home() {
   return (
     <main className="relative w-full min-h-screen h-screen overflow-hidden font-primary">
       {/* Header */}
-      <header className="absolute top-0 left-0 w-full flex items-center justify-between px-[5vw] py-[2vh] shadow-md z-30 font-medium text-white">
-        <Link href="/">
-          <img src="/images/logo.svg" alt="Logo" className="h-[3vh]" />
-        </Link>
-        <nav className="flex space-x-[2vw]">
-          <Link
-            href="/contact"
-            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm"
-          >
-            Contact
+      <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
+          <Link href="/">
+            <img
+              src="/images/logo.svg"
+              alt="Logo"
+              className="h-6 sm:h-7 md:h-8"
+            />
           </Link>
-          <Link
-            href="/about"
-            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm"
-          >
-            About Us
-          </Link>
-        </nav>
-      </header>
-
+          <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
+            <Link
+              href="/contact"
+              className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Contact
+            </Link>
+            <Link
+              href="/about"
+              className={`relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
+            >
+              About Us
+            </Link>
+          </nav>
+        </header>
       <div className="main-content absolute inset-0">
         <div className="relative w-full h-full min-h-[100vh] flex flex-col justify-center items-center">
           <AnimatePresence initial={false}>

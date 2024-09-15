@@ -3,40 +3,53 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Image from 'next/image'; // For logo optimization
 
 const Contact = () => {
   return (
     <div className="contact-page">
+      {/* Preload Hero Image */}
+      <link
+        rel="preload"
+        as="image"
+        href="/images/contact.jpeg" // Preloading contact.jpeg
+        type="image/jpeg"
+        importance="high"
+      />
+
       {/* Hero Section */}
       <section
         className="relative min-h-[40vh] md:min-h-[60vh] bg-fixed bg-cover bg-center pt-20 flex flex-col justify-center"
         style={{
-          backgroundImage: "url('/images/contact.jpeg')",
+          backgroundImage: "url('/images/contact.jpeg')", // Keep contact.jpeg
           backgroundSize: "cover",
           backgroundPosition: "center center",
         }}
       >
         {/* Header */}
-        <header className="absolute top-0 left-0 w-full flex items-center justify-between px-6 md:px-16 py-4 md:py-6 shadow-md z-30 font-medium text-white">
+        <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
           <Link href="/">
-            <img src="/images/logo.svg" alt="Logo" className="h-6 md:h-8" />
+            <img
+              src="/images/logo.svg"
+              alt="Logo"
+              className="h-6 sm:h-7 md:h-8"
+            />
           </Link>
-          <nav className="flex space-x-6 md:space-x-10">
+          <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
             <Link
               href="/contact"
-              className="relative transition-colors duration-200 font-bold text-xs md:text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+              className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
             >
               Contact
             </Link>
             <Link
               href="/about"
-              className="relative transition-colors duration-200 font-bold text-xs md:text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+              className={`relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
             >
               About Us
             </Link>
           </nav>
         </header>
-
         {/* Updated Overlay Gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/90 to-transparent opacity-90"></div>
 
