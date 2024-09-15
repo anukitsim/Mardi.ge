@@ -1,5 +1,6 @@
 import "./globals.css";
 import Head from "next/head";
+import ServiceWorkerRegister from "./components/ServiceWorkerRegister";  // Import the client-side component
 
 export const metadata = {
   title: "MARDI HOLDING",
@@ -24,7 +25,10 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/icon.ico" />
       </Head>
 
-      <body>{children}</body>
+      <body>
+        {children}
+        <ServiceWorkerRegister />  {/* Register the service worker */}
+      </body>
     </html>
   );
 }
