@@ -230,53 +230,56 @@ export default function Home() {
           ref={containerRef}
           className="absolute bottom-[10vh] left-1/2 transform -translate-x-1/2 flex overflow-x-auto w-full px-[5vw] box-border whitespace-nowrap z-50 scrollbar-none gap-[3vw]"
         >
-          {Array.from({ length: videoSources.length }).map((_, index) => (
-            <motion.div
-              key={index}
-              className={`relative inline-block w-[40vw] sm:w-[20vw] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${
-                activeIndex === index ? "shadow-lg" : ""
-              }`}
-              style={{
-                border:
-                  activeIndex === index
-                    ? "2px solid rgba(255, 255, 255, 0.8)"
-                    : "2px solid transparent",
-                transition: "all 0.4s ease",
-                borderRadius: "15px",
-              }}
-              whileHover={{
-                scale: 1.02,
-                boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
-                filter: "brightness(1.15)",
-              }}
-              onClick={() => handleClick(index)}
-            >
-              <Image
-                src={`/images/image${index + 1}.webp`}
-                alt={titles[index]}
-                fill
-                sizes="(max-width: 640px) 40vw, (max-width: 1024px) 20vw, 10vw"
-                priority={index === 0}
-                style={{
-                  objectFit: "cover",
-                  filter: "brightness(0.7) contrast(1.1)",
-                }}
-              />
+        {Array.from({ length: videoSources.length }).map((_, index) => (
+  <motion.div
+    key={index}
+    className={`relative inline-block w-[40vw] sm:w-[20vw] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${
+      activeIndex === index ? "shadow-lg" : ""
+    }`}
+    style={{
+      border:
+        activeIndex === index
+          ? "2px solid rgba(255, 255, 255, 0.8)"
+          : "2px solid transparent",
+      transition: "all 0.4s ease",
+      borderRadius: "15px",
+    }}
+    whileHover={{
+      scale: 1.02,
+      boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
+      filter: "brightness(1.15)",
+    }}
+    onClick={() => handleClick(index)}
+  >
+    <Image
+      src={`/images/image${index + 1}.webp`}
+      alt={titles[index]}
+      fill
+      sizes="(max-width: 640px) 40vw, (max-width: 1024px) 20vw, 10vw"
+      {...(index === 0
+        ? { priority: true } // Only the first image has priority
+        : { loading: "lazy" })} // All other images use lazy loading
+      style={{
+        objectFit: "cover",
+        filter: "brightness(0.7) contrast(1.1)",
+      }}
+    />
 
-              <div className="absolute bottom-0 left-0 right-0 p-[3vw] sm:p-[1vw] text-[3.5vw] sm:text-[1vw] text-center bg-white bg-opacity-15">
-                <div className="text-white text-right">{titles[index]}</div>
-              </div>
+    <div className="absolute bottom-0 left-0 right-0 p-[3vw] sm:p-[1vw] text-[3.5vw] sm:text-[1vw] text-center bg-white bg-opacity-15">
+      <div className="text-white text-right">{titles[index]}</div>
+    </div>
 
-              {activeIndex === index && (
-                <div
-                  className="progress-bar-background absolute left-0 right-0 h-[0.4vw] z-[2000] overflow-hidden"
-                  style={{ bottom: "0vw" }}
-                >
-                  <div className="progress-bar-fill h-full" />
-                </div>
-              )}
-            </motion.div>
-          ))}
+    {activeIndex === index && (
+      <div
+        className="progress-bar-background absolute left-0 right-0 h-[0.4vw] z-[2000] overflow-hidden"
+        style={{ bottom: "0vw" }}
+      >
+        <div className="progress-bar-fill h-full" />
+      </div>
+    )}
+  </motion.div>
+))}
+
         </div>
       </div>
 

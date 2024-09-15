@@ -3,42 +3,51 @@ import Hls from 'hls.js';
 
 const VideoPlayer = ({ sources, className, autoPlay = true, muted = true, loop = true, preload = 'auto', style }) => {
   const videoRef = useRef(null);
+  let hls; // Declare hls variable outside of useEffect to make it accessible for cleanup
 
   useEffect(() => {
+    // Check if HLS.js is supported in the user's browser
     if (Hls.isSupported() && sources.hls) {
-      const hls = new Hls({
-        lowLatencyMode: true,         // Low latency for faster video startup
-        maxMaxBufferLength: 120,      // Buffer enough data for smooth transitions
-        startLevel: -1,               // Automatically start at the highest available quality
-        capLevelToPlayerSize: false,  // Don't cap the quality based on player size
-        maxBufferLength: 60,          // Increase buffer size to avoid buffering
-        autoStartLoad: true,          // Start loading as soon as the component mounts
-        enableWorker: true,           // Use web workers for better performance
-        maxAutoLevelCapping: -1,      // Ensure the highest quality is prioritized
-        debug: false,                 // Disable debug logs for production
+      // Initialize HLS.js
+      hls = new Hls({
+        lowLatencyMode: true,  // Reduce latency for faster video startup
+        maxMaxBufferLength: 120,  // Increase buffer to ensure smooth playback
+        startLevel: 0,  // Start with the lowest quality stream initially
+        capLevelToPlayerSize: false,  // Don't cap quality based on player size
+        autoStartLoad: true,  // Begin loading as soon as the component mounts
+        enableWorker: true,  // Use web workers for better performance
+        maxBufferLength: 60,  // Keep enough buffer to avoid stalling
+        maxAutoLevelCapping: -1,  // Let HLS.js switch to the highest available quality
+        debug: false,  // Disable debug logs in production
       });
 
+      // Load the video source into HLS
       hls.loadSource(sources.hls);
       hls.attachMedia(videoRef.current);
 
-      // Event listener to force starting at the highest quality level (4K)
+      // Automatically switch to the best available quality once the video starts playing
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        // Play the video
         videoRef.current.play();
-
-        // Force the highest available quality (e.g., 4K)
-        hls.currentLevel = hls.levels.length - 1; // Start with highest level
+        hls.currentLevel = hls.levels.length - 1;  // Set to the highest quality once playback starts
       });
 
-      // Handle errors: Allow fallback to lower quality if buffering issues occur
+      // Handle errors, e.g., if buffering occurs
       hls.on(Hls.Events.ERROR, (event, data) => {
         if (data.details === Hls.ErrorDetails.BUFFER_STALLED_ERROR || data.details === Hls.ErrorDetails.BUFFER_SEEK_OVER_HOLE) {
-          hls.currentLevel = Math.max(hls.currentLevel - 1, 0);  // Step down the quality to prevent interruptions
+          hls.currentLevel = Math.max(hls.currentLevel - 1, 0);  // Step down quality to avoid stalling
         }
       });
     } else if (videoRef.current.canPlayType('application/vnd.apple.mpegurl')) {
+      // Fallback for Safari (which supports HLS natively)
       videoRef.current.src = sources.hls;
     }
+
+    // Cleanup HLS instance on unmount
+    return () => {
+      if (hls) {
+        hls.destroy();
+      }
+    };
   }, [sources]);
 
   return (
@@ -50,7 +59,7 @@ const VideoPlayer = ({ sources, className, autoPlay = true, muted = true, loop =
       loop={loop}
       preload={preload}
       style={style}
-      playsInline  // For better mobile support
+      playsInline  // For mobile support
     >
       {sources.webm && <source src={sources.webm} type="video/webm" />}
       {sources.mp4 && <source src={sources.mp4} type="video/mp4" />}
