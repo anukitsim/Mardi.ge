@@ -1,10 +1,16 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import VideoPlayer from "./components/VideoPlayer";
+import dynamic from "next/dynamic";
+
+// Dynamically import VideoPlayer for better load times
+const DynamicVideoPlayer = dynamic(() => import("./components/VideoPlayer"), {
+  ssr: false,
+  loading: () => <div>Loading video...</div>, // Loading placeholder
+});
 
 export default function Home() {
   const containerRef = useRef(null);
@@ -62,10 +68,10 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   // Preload the next video in advance to ensure it's ready
-  useEffect(() => {
+  const preloadNextVideo = useCallback(() => {
     const nextIndex = (activeIndex + 1) % videoSources.length;
-    const preloadVideo = document.createElement('video');
-    preloadVideo.src = videoSources[nextIndex].hls;  // Preload next video
+    const preloadVideo = document.createElement("video");
+    preloadVideo.src = videoSources[nextIndex].hls; // Preload next video
   }, [activeIndex]);
 
   useEffect(() => {
@@ -84,19 +90,19 @@ export default function Home() {
       return () => clearTimeout(timeout); // Clean up timeout on unmount
     }
   }, [prevVideo]);
-  
 
-  const handleNextThumbnail = () => {
+  const handleNextThumbnail = useCallback(() => {
     const nextIndex = (activeIndex + 1) % videoSources.length;
     handleClick(nextIndex);
-  };
+  }, [activeIndex]);
 
   const handleClick = (index) => {
     if (index !== activeIndex) {
       setPrevVideo(currentVideo); // Set the previous video before changing
       setCurrentVideo(videoSources[index]);
       setActiveIndex(index);
-  
+      preloadNextVideo();
+
       const container = containerRef.current;
       const clickedThumbnail = container.children[index];
       clickedThumbnail.scrollIntoView({
@@ -131,13 +137,13 @@ export default function Home() {
         <nav className="flex space-x-[2vw]">
           <Link
             href="/contact"
-            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-0.3vw] after:h-[0.2vw] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm"
           >
             Contact
           </Link>
           <Link
             href="/about"
-            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm after:content-[''] after:absolute after:left-0 after:bottom-[-0.3vw] after:h-[0.2vw] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm"
           >
             About Us
           </Link>
@@ -146,53 +152,28 @@ export default function Home() {
 
       <div className="main-content absolute inset-0">
         <div className="relative w-full h-full min-h-[100vh] flex flex-col justify-center items-center">
-        <AnimatePresence initial={false}>
-  {prevVideo && (
-    <motion.div
-      key={prevVideo.hls} // Unique key for framer-motion to handle transitions
-      className="absolute top-0 left-0 w-full h-full"
-      initial={{ opacity: 1 }}
-      animate={{ opacity: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1 }} // Fade out smoothly
-    >
-      <VideoPlayer
-        sources={prevVideo}
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        loop
-        preload="auto"  // Ensure videos are preloaded
-        style={{
-          filter: "brightness(100%) contrast(105%) saturate(100%)",
-        }}
-      />
-    </motion.div>
-  )}
-
-  {currentVideo && (
-    <motion.div
-      key={currentVideo.hls} // Unique key for framer-motion
-      className="absolute top-0 left-0 w-full h-full"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1 }} // Fade in smoothly
-    >
-      <VideoPlayer
-        sources={currentVideo}
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        loop
-        preload="auto" // Ensure videos are preloaded
-        style={{
-          filter: "brightness(100%) contrast(105%) saturate(100%)",
-        }}
-      />
-    </motion.div>
-  )}
-</AnimatePresence>
+          <AnimatePresence initial={false}>
+            {currentVideo && (
+              <motion.div
+                key={currentVideo.hls}
+                className="absolute top-0 left-0 w-full h-full"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }}
+              >
+                <DynamicVideoPlayer
+                  sources={currentVideo}
+                  className="absolute top-0 left-0 w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  preload="auto"
+                  style={{ filter: "brightness(100%) contrast(105%) saturate(100%)" }}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div
             className="overlay absolute inset-0"

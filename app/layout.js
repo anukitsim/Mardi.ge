@@ -11,15 +11,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-       {/* <Head>
-       <link rel="preload" href="/videos/video1.webm" as="video" type="video/webm" />
-        <link rel="preload" href="/videos/video2.webm" as="video" type="video/webm" />
-        <link rel="preload" href="/videos/video3.webm" as="video" type="video/webm" />
-        <link rel="preload" href="/videos/video5.webm" as="video" type="video/webm" />
-        <link rel="preload" href="/videos/video6.webm" as="video" type="video/webm" />
-        <link rel="preload" href="/videos/video7.webm" as="video" type="video/webm" />
+       <Head>
+       <link rel="preload" href="https://customer-s2m96v0a16zk0okb.cloudflarestream.com/bf21043eaee42753a3d3bc48e222d754/manifest/video.m3u8" as="video" />
+       <link rel="preload" href="/images/image1.webp" as="image" />
         <link rel="icon" href="/icon.ico" />
-      </Head> */}
+      </Head>
       
       <body>{children}</body>
     </html>
