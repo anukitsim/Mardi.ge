@@ -56,7 +56,21 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [loadedVideos, setLoadedVideos] = useState([0]); // Track which videos are loaded
 
-  // Lazy-load the next video only when it's close to viewport
+  
+  // Preload the next video when it is about to appear in the viewport
+  const preloadNextVideo = useCallback((nextIndex) => {
+    if (nextIndex < videoSources.length) {
+      // Only preload if the next video hasn't been preloaded yet
+      if (!loadedVideos.includes(nextIndex)) {
+        const preloadManifest = document.createElement("link");
+        preloadManifest.rel = "preload";
+        preloadManifest.as = "video";
+        preloadManifest.href = videoSources[nextIndex].hls;
+        document.head.appendChild(preloadManifest);
+      }
+    }
+  }, [loadedVideos, videoSources]);
+
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -64,38 +78,26 @@ export default function Home() {
           const index = parseInt(entry.target.getAttribute("data-index"));
           if (entry.isIntersecting && !loadedVideos.includes(index)) {
             setLoadedVideos((prev) => [...prev, index]); // Mark video as loaded
+            // Preload the next video as the user scrolls close to it
+            preloadNextVideo(index + 1); // Preload the next video in sequence
           }
         });
       },
-      { threshold: 0.5 }
+      { threshold: 0.9 } // Only trigger when 90% of the element is visible
     );
-
+  
     if (containerRef.current) {
       Array.from(containerRef.current.children).forEach((thumbnail) => {
         observerRef.current.observe(thumbnail);
       });
     }
-
+  
     return () => {
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
     };
-  }, [containerRef, loadedVideos]);
-
-  // Preload the next video on idle time
-  const preloadNextVideo = useCallback(() => {
-    const nextIndex = (activeIndex + 1) % videoSources.length;
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(() => {
-        const preloadManifest = document.createElement("link");
-        preloadManifest.rel = "preload";
-        preloadManifest.as = "video";
-        preloadManifest.href = videoSources[nextIndex].hls;
-        document.head.appendChild(preloadManifest);
-      });
-    }
-  }, [activeIndex, videoSources]);
+  }, [containerRef, loadedVideos, preloadNextVideo]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -123,7 +125,6 @@ export default function Home() {
       setPrevVideo(currentVideo); // Set the previous video before changing
       setCurrentVideo(videoSources[index]);
       setActiveIndex(index);
-      preloadNextVideo();
 
       const container = containerRef.current;
       const clickedThumbnail = container.children[index];
@@ -143,9 +144,7 @@ export default function Home() {
       transition: { duration: 1.5, ease: "easeOut" },
     },
     exit: {
-      opacity: 0,
-      x: -200,
-      transition: { duration: 0.7, ease: "easeIn" },
+      opacity: 0, x: -200, transition: { duration: 0.7, ease: "easeIn" },
     },
   };
 
@@ -177,7 +176,8 @@ export default function Home() {
                   autoPlay
                   muted
                   loop
-                  preload="auto" // Autoplay and preload only the active video
+                  preload="auto"
+                  importance="high" // Prioritize the first video
                   style={{ filter: "brightness(100%) contrast(105%) saturate(100%)" }}
                 />
               </motion.div>
