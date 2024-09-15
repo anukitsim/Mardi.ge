@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 // Dynamically import VideoPlayer for better load times
 const DynamicVideoPlayer = dynamic(() => import("./components/VideoPlayer"), {
   ssr: false,
-  loading: () => <div>Loading video...</div>, // Loading placeholder
+  
 });
 
 export default function Home() {
@@ -17,7 +17,7 @@ export default function Home() {
 
   const videoSources = [
     {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/bf21043eaee42753a3d3bc48e222d754/manifest/video.m3u8",
+      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/12e384b7982be56ce1185fec1820fc59/manifest/video.m3u8",
     },
     {
       hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/0277dfb0898223f82c258c0a2d881bce/manifest/video.m3u8",
@@ -67,12 +67,16 @@ export default function Home() {
   const [prevVideo, setPrevVideo] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Preload the next video in advance to ensure it's ready
-  const preloadNextVideo = useCallback(() => {
+   // Preload next video and its first segment
+   const preloadNextVideo = useCallback(() => {
     const nextIndex = (activeIndex + 1) % videoSources.length;
-    const preloadVideo = document.createElement("video");
-    preloadVideo.src = videoSources[nextIndex].hls; // Preload next video
-  }, [activeIndex]);
+    const preloadManifest = document.createElement("link");
+    preloadManifest.rel = "preload";
+    preloadManifest.as = "video";
+    preloadManifest.href = videoSources[nextIndex].hls;
+    document.head.appendChild(preloadManifest);
+  }, [activeIndex, videoSources]);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
