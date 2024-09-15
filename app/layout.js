@@ -1,4 +1,5 @@
 import "./globals.css";
+import Head from "next/head";
 
 
 
@@ -10,9 +11,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-      <link rel="icon" href="/icon.ico" />
-      </head>
+       {/* <Head>
+       <link rel="preload" href="/videos/video1.webm" as="video" type="video/webm" />
+        <link rel="preload" href="/videos/video2.webm" as="video" type="video/webm" />
+        <link rel="preload" href="/videos/video3.webm" as="video" type="video/webm" />
+        <link rel="preload" href="/videos/video5.webm" as="video" type="video/webm" />
+        <link rel="preload" href="/videos/video6.webm" as="video" type="video/webm" />
+        <link rel="preload" href="/videos/video7.webm" as="video" type="video/webm" />
+        <link rel="icon" href="/icon.ico" />
+      </Head> */}
+      
       <body>{children}</body>
     </html>
   );
