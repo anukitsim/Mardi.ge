@@ -11,16 +11,16 @@ export default function Home() {
 
   const videoSources = [
     {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/b0a391503bc5e09aa2db23335db71130/manifest/video.m3u8",
+      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/bf21043eaee42753a3d3bc48e222d754/manifest/video.m3u8",
     },
     {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/f71b86d75a8ee1e91bd220ce5b9270b3/manifest/video.m3u8",
+      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/0277dfb0898223f82c258c0a2d881bce/manifest/video.m3u8",
     },
     {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/078643178f63e35321ee140a16959aab/manifest/video.m3u8",
+      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/c5754dddf6541ec9ddbd434c356616d4/manifest/video.m3u8",
     },
     {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/cd8f99802e10e1aea9a74fda4ea1789c/manifest/video.m3u8",
+      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/3a53346ff334a41d95699aaced9184bd/manifest/video.m3u8",
     },
     {
       hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/4f9b08d32c2cb4a17d34619f5e5c2e66/manifest/video.m3u8",
@@ -29,7 +29,6 @@ export default function Home() {
       hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/82f394e500d8d442bb211749f4d29d25/manifest/video.m3u8",
     },
   ];
-
 
   const titles = [
     "Mardi Development",
