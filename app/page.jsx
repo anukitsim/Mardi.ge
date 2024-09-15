@@ -33,12 +33,12 @@ export default function Home() {
   ];
 
   const descriptions = [
-    "Creating premium hotels in partnership with top international brands. Invest in high-quality real estate, from luxury apartments to townhouses.",
-    "Discover Adjarian Wine House, home to the unique Chkhaveri grape. Enjoy Georgian wines, explore winemaking history, and enjoy delicious cuisine.",
-    "Explore the beauty of Georgia with Mardi Travel Lab, your guide to authentic travel experiences.",
+    "Creating premium hotels in partnership with top international brands.",
+    "Discover Adjarian Wine House, home to the unique Chkhaveri grape.",
+    "Explore the beauty of Georgia with Mardi Travel Lab.",
     "Cascade of hydropower plants on the Khokhniskali River, Keda.",
-    "Producing Porto Franco wine and Georgian-grown tobacco, crafted with traditional Cuban techniques.",
-    "Aiming to be Georgia’s top hospitality management company, delivering services and profitability matching international standards.",
+    "Producing Porto Franco wine and Georgian-grown tobacco.",
+    "Aiming to be Georgia’s top hospitality management company.",
   ];
 
   const urls = [
@@ -161,7 +161,7 @@ export default function Home() {
                   autoPlay
                   muted
                   loop
-                  preload="auto"
+                  preload={activeIndex === 0 ? "auto" : "none"} // Preload only for the first video
                   style={{ filter: "brightness(100%) contrast(105%) saturate(100%)" }}
                 />
               </motion.div>
