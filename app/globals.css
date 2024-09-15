@@ -159,60 +159,6 @@ body {
 
 
 
-/* small button */
-
-
-.button-assist-small {
-  position: absolute;
-
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 14px;
-  text-transform: uppercase;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background-color: transparent;
-  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease,
-    box-shadow 0.4s ease, border-color 0.4s ease;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.button-assist-small::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 100%;
-  background: rgba(255, 255, 255, 0.5);
-  transition: left 0.5s ease-in-out;
-  z-index: 1;
-}
-
-.button-assist-small:hover::before {
-  left: 0;
-}
-
-.button-assist-small:hover {
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.2),
-    rgba(255, 255, 255, 0.1)
-  );
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 255, 255, 0.6);
-  border-color: rgba(255, 255, 255, 1);
-}
-
-.button-assist-small span {
-  position: relative;
-  z-index: 2;
-}
 
 .text-shadow-strong {
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9); /* Stronger shadow for better contrast */

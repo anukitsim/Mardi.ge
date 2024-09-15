@@ -8,32 +8,19 @@ import dynamic from "next/dynamic";
 
 // Dynamically import VideoPlayer for better load times
 const DynamicVideoPlayer = dynamic(() => import("./components/VideoPlayer"), {
-  ssr: false,
-  
+  ssr: false, // Disable server-side rendering to load after the page is interactive
 });
 
 export default function Home() {
   const containerRef = useRef(null);
 
   const videoSources = [
-    {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/12e384b7982be56ce1185fec1820fc59/manifest/video.m3u8",
-    },
-    {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/0277dfb0898223f82c258c0a2d881bce/manifest/video.m3u8",
-    },
-    {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/4eba15fa3952112976869172831b4c3f/manifest/video.m3u8",
-    },
-    {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/3a53346ff334a41d95699aaced9184bd/manifest/video.m3u8",
-    },
-    {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/4f9b08d32c2cb4a17d34619f5e5c2e66/manifest/video.m3u8",
-    },
-    {
-      hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/82f394e500d8d442bb211749f4d29d25/manifest/video.m3u8",
-    },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/12e384b7982be56ce1185fec1820fc59/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/0277dfb0898223f82c258c0a2d881bce/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/4eba15fa3952112976869172831b4c3f/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/3a53346ff334a41d95699aaced9184bd/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/4f9b08d32c2cb4a17d34619f5e5c2e66/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/82f394e500d8d442bb211749f4d29d25/manifest/video.m3u8" },
   ];
 
   const titles = [
@@ -67,8 +54,8 @@ export default function Home() {
   const [prevVideo, setPrevVideo] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-   // Preload next video and its first segment
-   const preloadNextVideo = useCallback(() => {
+  // Preload the next video
+  const preloadNextVideo = useCallback(() => {
     const nextIndex = (activeIndex + 1) % videoSources.length;
     const preloadManifest = document.createElement("link");
     preloadManifest.rel = "preload";
@@ -77,12 +64,10 @@ export default function Home() {
     document.head.appendChild(preloadManifest);
   }, [activeIndex, videoSources]);
 
-
   useEffect(() => {
     const timer = setTimeout(() => {
       handleNextThumbnail();
     }, 10000); // 10 seconds
-
     return () => clearTimeout(timer);
   }, [activeIndex]);
 
@@ -135,28 +120,29 @@ export default function Home() {
     <main className="relative w-full min-h-screen h-screen overflow-hidden font-primary">
       {/* Header */}
       <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
-          <Link href="/">
-            <img
-              src="/images/logo.svg"
-              alt="Logo"
-              className="h-6 sm:h-7 md:h-8"
-            />
+        <Link href="/">
+          <img
+            src="/images/logo.svg"
+            alt="Logo"
+            className="h-6 sm:h-7 md:h-8"
+          />
+        </Link>
+        <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
+          <Link
+            href="/contact"
+            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+          >
+            Contact
           </Link>
-          <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
-            <Link
-              href="/contact"
-              className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Contact
-            </Link>
-            <Link
-              href="/about"
-              className={`relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
-            >
-              About Us
-            </Link>
-          </nav>
-        </header>
+          <Link
+            href="/about"
+            className={`relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
+          >
+            About Us
+          </Link>
+        </nav>
+      </header>
+
       <div className="main-content absolute inset-0">
         <div className="relative w-full h-full min-h-[100vh] flex flex-col justify-center items-center">
           <AnimatePresence initial={false}>
@@ -237,56 +223,55 @@ export default function Home() {
           ref={containerRef}
           className="absolute bottom-[10vh] left-1/2 transform -translate-x-1/2 flex overflow-x-auto w-full px-[5vw] box-border whitespace-nowrap z-50 scrollbar-none gap-[3vw]"
         >
-        {Array.from({ length: videoSources.length }).map((_, index) => (
-  <motion.div
-    key={index}
-    className={`relative inline-block w-[40vw] sm:w-[20vw] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${
-      activeIndex === index ? "shadow-lg" : ""
-    }`}
-    style={{
-      border:
-        activeIndex === index
-          ? "2px solid rgba(255, 255, 255, 0.8)"
-          : "2px solid transparent",
-      transition: "all 0.4s ease",
-      borderRadius: "15px",
-    }}
-    whileHover={{
-      scale: 1.02,
-      boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
-      filter: "brightness(1.15)",
-    }}
-    onClick={() => handleClick(index)}
-  >
-    <Image
-      src={`/images/image${index + 1}.webp`}
-      alt={titles[index]}
-      fill
-      sizes="(max-width: 640px) 40vw, (max-width: 1024px) 20vw, 10vw"
-      {...(index === 0
-        ? { priority: true } // Only the first image has priority
-        : { loading: "lazy" })} // All other images use lazy loading
-      style={{
-        objectFit: "cover",
-        filter: "brightness(0.7) contrast(1.1)",
-      }}
-    />
+          {Array.from({ length: videoSources.length }).map((_, index) => (
+            <motion.div
+              key={index}
+              className={`relative inline-block w-[40vw] sm:w-[20vw] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${
+                activeIndex === index ? "shadow-lg" : ""
+              }`}
+              style={{
+                border:
+                  activeIndex === index
+                    ? "2px solid rgba(255, 255, 255, 0.8)"
+                    : "2px solid transparent",
+                transition: "all 0.4s ease",
+                borderRadius: "15px",
+              }}
+              whileHover={{
+                scale: 1.02,
+                boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)",
+                filter: "brightness(1.15)",
+              }}
+              onClick={() => handleClick(index)}
+            >
+              <Image
+                src={`/images/image${index + 1}.webp`}
+                alt={titles[index]}
+                fill
+                sizes="(max-width: 640px) 40vw, (max-width: 1024px) 20vw, 10vw"
+                {...(index === 0
+                  ? { priority: true } // Only the first image has priority
+                  : { loading: "lazy" })} // All other images use lazy loading
+                style={{
+                  objectFit: "cover",
+                  filter: "brightness(0.7) contrast(1.1)",
+                }}
+              />
 
-    <div className="absolute bottom-0 left-0 right-0 p-[3vw] sm:p-[1vw] text-[3.5vw] sm:text-[1vw] text-center bg-white bg-opacity-15">
-      <div className="text-white text-right">{titles[index]}</div>
-    </div>
+              <div className="absolute bottom-0 left-0 right-0 p-[3vw] sm:p-[1vw] text-[3.5vw] sm:text-[1vw] text-center bg-white bg-opacity-15">
+                <div className="text-white text-right">{titles[index]}</div>
+              </div>
 
-    {activeIndex === index && (
-      <div
-        className="progress-bar-background absolute left-0 right-0 h-[0.4vw] z-[2000] overflow-hidden"
-        style={{ bottom: "0vw" }}
-      >
-        <div className="progress-bar-fill h-full" />
-      </div>
-    )}
-  </motion.div>
-))}
-
+              {activeIndex === index && (
+                <div
+                  className="progress-bar-background absolute left-0 right-0 h-[0.4vw] z-[2000] overflow-hidden"
+                  style={{ bottom: "0vw" }}
+                >
+                  <div className="progress-bar-fill h-full" />
+                </div>
+              )}
+            </motion.div>
+          ))}
         </div>
       </div>
 

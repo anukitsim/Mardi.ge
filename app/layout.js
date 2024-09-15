@@ -3,19 +3,22 @@ import Head from "next/head";
 
 export const metadata = {
   title: "MARDI HOLDING",
-  description: "construction and development company",
+  description: "Construction and Development Company",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Head>
-        {/* Preconnect to Cloudflare */}
+        {/* Preconnect and DNS-prefetch for faster resource resolution */}
         <link rel="preconnect" href="https://customer-s2m96v0a16zk0okb.cloudflarestream.com" />
         <link rel="dns-prefetch" href="https://customer-s2m96v0a16zk0okb.cloudflarestream.com" />
 
         {/* Preload the first video */}
-        <link rel="preload" href="https://customer-s2m96v0a16zk0okb.cloudflarestream.com/bf21043eaee42753a3d3bc48e222d754/manifest/video.m3u8" as="video" />
+        <link rel="preload" href="https://customer-s2m96v0a16zk0okb.cloudflarestream.com/12e384b7982be56ce1185fec1820fc59/manifest/video.m3u8" as="video" />
+
+        {/* Preload essential fonts */}
+        <link rel="preload" href="/fonts/your-font.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         
         {/* Favicon */}
         <link rel="icon" href="/icon.ico" />
