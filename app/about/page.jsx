@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { throttle } from 'lodash';
+
 
 const About = React.memo(() => {
   const [visibleSections, setVisibleSections] = useState({
@@ -81,6 +83,32 @@ const About = React.memo(() => {
     };
   }, []);
 
+
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (sectionRefs.current.section1) {
+            sectionRefs.current.section1.style.transform = `translateY(${
+              scrollPosition * 0.3
+            }px)`;
+          }
+          ticking = false; // Allows next frame
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <main className="relative w-full overflow-hidden font-primary">
       {/* Section 1: Hero Section with Parallax */}
@@ -103,24 +131,24 @@ const About = React.memo(() => {
 
         <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
           <Link href="/">
-            <img
+            <Image
               src="/images/logo.svg"
               alt="Logo"
+              width={100}
+              height={30}
               className="h-6 sm:h-7 md:h-8"
             />
           </Link>
           <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
             <Link
               href="/contact"
-              className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base"
+              className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
             >
               Contact
             </Link>
             <Link
               href="/about"
-              className={`relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base ${
-                pathname === "/about" ? "after:w-full" : "after:w-0"
-              }`}
+              className={`relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
             >
               About Us
             </Link>
@@ -255,7 +283,7 @@ const About = React.memo(() => {
                 backgroundPosition: "center", // Centered for responsive design
                 transform: `translate3d(0, ${scrollY * 0.2}px, 0)`, // Parallax effect
                 backgroundSize: 'cover', // Ensure the background covers fully
-                willChange: "transform", // Optimization for smoother performance
+                willChange: scrollY > 0 ? "transform" : "auto",
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
@@ -273,7 +301,7 @@ const About = React.memo(() => {
                 backgroundPosition: "center", // Center the image
                 transform: `translate3d(0, ${scrollY * 0.2}px, 0)`, // Parallax effect for wine image
                 backgroundSize: "cover", // Ensure the image covers the container fully
-                willChange: "transform", // Optimization for smoother animations
+                willChange: scrollY > 0 ? "transform" : "auto",
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
