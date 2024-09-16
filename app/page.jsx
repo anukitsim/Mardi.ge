@@ -16,12 +16,12 @@ export default function Home() {
   const loadedVideosRef = useRef(new Set());
 
   const videoSources = [
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/12e384b7982be56ce1185fec1820fc59/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/0277dfb0898223f82c258c0a2d881bce/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/4eba15fa3952112976869172831b4c3f/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/3a53346ff334a41d95699aaced9184bd/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/4f9b08d32c2cb4a17d34619f5e5c2e66/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/82f394e500d8d442bb211749f4d29d25/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/88fed3cec9a344f16384026c852d1aa9/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/b8426a1bf1ba0d5690f2778538bfbeb7/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/23044072623a8a914ea8360a01945207/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/1624211b3a61d0f8ab0e424b30c5d566/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/9291ab43985f550be5c0e27049098583/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/85be995f6fb1b3b1935e6b552f2ff8c3/manifest/video.m3u8" },
   ];
 
   const titles = [
