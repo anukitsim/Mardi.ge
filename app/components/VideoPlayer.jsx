@@ -1,13 +1,22 @@
 import { useEffect, useRef } from "react";
 import Hls from "hls.js";
 
-const VideoPlayer = ({ sources, className, autoPlay = true, muted = true, loop = true, preload = "auto", style, importance = "auto" }) => {
+const VideoPlayer = ({ 
+  sources, 
+  className, 
+  autoPlay = true, 
+  muted = true, 
+  loop = true, 
+  preload = "auto", 
+  style, 
+  importance = "auto" 
+}) => {
   const videoRef = useRef(null);
-  let hls;
+  const hlsInstance = useRef(null);  // Use ref to hold HLS instance
 
   const setupHls = () => {
     if (Hls.isSupported() && sources.hls) {
-      hls = new Hls({
+      hlsInstance.current = new Hls({
         lowLatencyMode: importance === "high", // Use low latency for the first video
         startLevel: -1, // Let HLS.js decide the start level based on network conditions
         maxMaxBufferLength: importance === "high" ? 60 : 30, // Increase buffer for smooth playback
@@ -16,36 +25,54 @@ const VideoPlayer = ({ sources, className, autoPlay = true, muted = true, loop =
         enableWorker: true, // Use Web Workers for parsing and decoding
       });
 
-      hls.loadSource(sources.hls);
-      hls.attachMedia(videoRef.current);
+      hlsInstance.current.loadSource(sources.hls);
+      hlsInstance.current.attachMedia(videoRef.current);
 
       // Ensure video plays when enough data is buffered
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        videoRef.current.addEventListener('canplaythrough', () => {
-          videoRef.current.play();
-        });
+      hlsInstance.current.on(Hls.Events.MANIFEST_PARSED, () => {
+        if (videoRef.current) {
+          videoRef.current.addEventListener('canplaythrough', handleCanPlay);
+        }
       });
 
       // Immediately switch to the highest quality after video starts playing
-      hls.on(Hls.Events.FRAG_LOADED, () => {
-        if (hls.autoLevelEnabled) {
-          hls.currentLevel = hls.levels.length - 1; // Ensure maximum quality is loaded
+      hlsInstance.current.on(Hls.Events.FRAG_LOADED, () => {
+        if (hlsInstance.current && hlsInstance.current.autoLevelEnabled) {
+          hlsInstance.current.currentLevel = hlsInstance.current.levels.length - 1; // Ensure maximum quality is loaded
         }
       });
-    } else if (videoRef.current.canPlayType("application/vnd.apple.mpegurl")) {
+    } else if (videoRef.current && videoRef.current.canPlayType("application/vnd.apple.mpegurl")) {
+      // Fallback for Safari
       videoRef.current.src = sources.hls;
-      videoRef.current.addEventListener('canplaythrough', () => {
-        videoRef.current.play();
+      videoRef.current.addEventListener('canplaythrough', handleCanPlay);
+    }
+  };
+
+  const handleCanPlay = () => {
+    // Check if videoRef.current exists and can play the video
+    if (videoRef.current) {
+      videoRef.current.play().catch((error) => {
+        console.warn("Auto-play prevented: ", error);
       });
     }
   };
 
   useEffect(() => {
-    setupHls();
+    if (videoRef.current) {
+      setupHls();
+    }
+
     return () => {
-      if (hls) hls.destroy();
+      // Clean up HLS instance and event listeners when the component unmounts
+      if (hlsInstance.current) {
+        hlsInstance.current.destroy();
+      }
+
+      if (videoRef.current) {
+        videoRef.current.removeEventListener('canplaythrough', handleCanPlay);
+      }
     };
-  }, [sources, importance]);
+  }, [sources.hls, importance]);  // Depend on sources and importance
 
   return (
     <video
