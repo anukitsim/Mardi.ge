@@ -12,6 +12,26 @@ const Contact = () => {
     img.src = "/images/contact.jpeg";
   }, []);
 
+  // Smooth parallax scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const parallaxSection = document.querySelector('.parallax-section');
+      const scrollPosition = window.scrollY;
+      
+      if (parallaxSection) {
+        window.requestAnimationFrame(() => {
+          parallaxSection.style.transform = `translateY(${scrollPosition * 0.3}px)`; // Adjust parallax speed
+        });
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const MemoizedHeader = useMemo(() => (
     <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
       <Link href="/">
@@ -45,7 +65,7 @@ const Contact = () => {
     <div className="contact-page">
       {/* Hero Section */}
       <section
-        className="relative min-h-[40vh] md:min-h-[60vh] bg-fixed bg-cover bg-center pt-20 flex flex-col justify-center"
+        className="parallax-section relative min-h-[40vh] md:min-h-[60vh] bg-fixed bg-cover bg-center pt-20 flex flex-col justify-center"
         style={{
           backgroundImage: "url('/images/contact.jpeg')",
           backgroundSize: "cover",
@@ -82,6 +102,9 @@ const Contact = () => {
           </motion.p>
         </motion.div>
       </section>
+
+      {/* Add spacing between the hero section and the form */}
+      <div className="spacer" style={{ height: '50px' }}></div>
 
       {/* Contact Form Section */}
       <section className="bg-gray-100 py-10 md:py-16 px-6 md:px-16">
