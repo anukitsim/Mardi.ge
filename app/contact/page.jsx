@@ -1,65 +1,75 @@
 "use client";
 
-import React, { useEffect, useMemo } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import NextImage from 'next/image'; // Rename to avoid conflict with native Image()
+import React, { useEffect, useMemo } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import NextImage from "next/image"; // Rename to avoid conflict with native Image()
 
 const Contact = () => {
   // Preload the Hero Image
   useEffect(() => {
-    const img = new window.Image(); // Use native Image constructor
+    const img = new window.Image(); // Preload image for faster load
     img.src = "/images/contact.jpeg";
   }, []);
 
-  // Smooth parallax scroll
+  // Smooth parallax scroll effect for the background image
   useEffect(() => {
+    let ticking = false; // Throttle the scroll event
+
     const handleScroll = () => {
-      const parallaxSection = document.querySelector('.parallax-section');
-      const scrollPosition = window.scrollY;
-      
-      if (parallaxSection) {
+      if (!ticking) {
         window.requestAnimationFrame(() => {
-          parallaxSection.style.transform = `translateY(${scrollPosition * 0.3}px)`; // Adjust parallax speed
+          const parallaxSection = document.querySelector(".parallax-section");
+          const scrollPosition = window.scrollY;
+
+          if (parallaxSection) {
+            parallaxSection.style.transform = `translateY(${scrollPosition * 0.15}px)`; // Parallax speed set lower for smoother scroll
+          }
+          ticking = false;
         });
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  const MemoizedHeader = useMemo(() => (
-    <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
-      <Link href="/">
-        <NextImage
-          src="/images/logo.svg"
-          alt="Logo"
-          width={100}
-          height={30}
-          className="h-6 sm:h-7 md:h-8"
-          priority
-        />
-      </Link>
-      <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
-        <Link
-          href="/contact"
-          className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-        >
-          Contact
+  // Memoized header to avoid unnecessary re-renders
+  const MemoizedHeader = useMemo(
+    () => (
+      <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
+        <Link href="/">
+          <NextImage
+            src="/images/logo.svg"
+            alt="Logo"
+            width={100}
+            height={30}
+            className="h-6 sm:h-7 md:h-8"
+            priority
+          />
         </Link>
-        <Link
-          href="/about"
-          className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-        >
-          About Us
-        </Link>
-      </nav>
-    </header>
-  ), []);
+        <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
+          <Link
+            href="/contact"
+            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+          >
+            Contact
+          </Link>
+          <Link
+            href="/about"
+            className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+          >
+            About Us
+          </Link>
+        </nav>
+      </header>
+    ),
+    []
+  );
 
   return (
     <div className="contact-page">
@@ -103,16 +113,16 @@ const Contact = () => {
         </motion.div>
       </section>
 
-      {/* Add spacing between the hero section and the form */}
-      <div className="spacer" style={{ height: '50px' }}></div>
+
+     
 
       {/* Contact Form Section */}
       <section className="bg-gray-100 py-10 md:py-16 px-6 md:px-16">
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-start">
           {/* Left Column - Head Office */}
-          <div className="w-full md:w-1/2 mb-10 md:mb-0">
+          <div className="w-full mt-20 md:w-1/2 mb-10 md:mb-0">
             <motion.h2
-              className="text-2xl md:text-3xl text-[#333333] font-bold mb-4"
+              className="text-2xl md:text-3xl  text-[#333333] font-bold mb-4"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.8 }}
@@ -146,7 +156,7 @@ const Contact = () => {
           </div>
 
           {/* Right Column - Get in Touch */}
-          <div className="w-full md:w-1/2">
+          <div className="w-full mt-20 md:w-1/2">
             <motion.h2
               className="text-2xl md:text-3xl text-[#333333] font-bold mb-4"
               initial={{ opacity: 0, y: 50 }}

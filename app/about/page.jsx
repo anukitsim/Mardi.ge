@@ -122,7 +122,7 @@ const About = React.memo(() => {
             </Link>
             <Link
               href="/about"
-              className={`relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
+              className={`relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
             >
               About Us
             </Link>
@@ -142,7 +142,7 @@ const About = React.memo(() => {
           }}
         >
           <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl font-primary uppercase leading-wide tracking-wide text-shadow-strong font-semibold text-white"
+            className="text-3xl sm:text-4xl md:text-5xl font-primary uppercase leading-wide tracking-wide text-shadow-strong font-semibold text-white mb-4"
             variants={{
               hidden: { opacity: 0, x: 50 },
               visible: { opacity: 1, x: 0 },
@@ -152,7 +152,7 @@ const About = React.memo(() => {
             About us
           </motion.h2>
           <motion.h2
-            className="mt-2 sm:mt-3 md:mt-4 text-lg sm:text-xl md:text-2xl text-shadow-strong font-light text-white text-opacity-80"
+            className="text-lg sm:text-xl md:text-2xl text-shadow-strong font-light text-white text-opacity-80 mb-6"
             variants={{
               hidden: { opacity: 0, x: 50 },
               visible: { opacity: 1, x: 0 },
@@ -163,6 +163,8 @@ const About = React.memo(() => {
           </motion.h2>
         </motion.div>
       </section>
+
+   
 
       {/* Section 2: Our Story */}
       <section
@@ -183,7 +185,7 @@ const About = React.memo(() => {
           }}
         >
           <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-10 lg:mb-20"
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-6"
             variants={{
               hidden: { opacity: 0, x: -50 },
               visible: { opacity: 1, x: 0 },
@@ -201,7 +203,7 @@ const About = React.memo(() => {
               }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed galaxy-fold:text-balanced tracking-normal">
+              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed galaxy-fold:text-balanced tracking-normal mb-6">
                 Mardi Holding is a construction and development company that
                 unifies construction, architectural, tourism, transportation and
                 real estate companies, wine and cigar factories, as well as
@@ -231,9 +233,8 @@ const About = React.memo(() => {
         </motion.div>
       </section>
 
-
-      {/* Section 5: Construction and Development */}
-      <section
+         {/* Section 5: Construction and Development */}
+         <section
         className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white relative z-10"
         ref={(el) => (sectionRefs.current.section5 = el)}
         data-section="section5"
@@ -251,7 +252,7 @@ const About = React.memo(() => {
           }}
         >
           <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-10 lg:mb-20"
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-6"
             variants={{
               hidden: { opacity: 0, x: -50 },
               visible: { opacity: 1, x: 0 },
@@ -260,30 +261,26 @@ const About = React.memo(() => {
           >
             Construction & Development
           </motion.h2>
-          <div className="flex flex-col md:flex-row justify-between items-start space-y-8 md:space-y-0 md:space-x-12">
-            <motion.div
-              className="md:w-1/2 pr-4 galaxy-fold:w-full"
-              variants={{
-                hidden: { opacity: 0, y: 50 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 1, ease: "easeOut" }}
-            >
-              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
-                The main field of business of Mardi Holding is construction and
-                development. The facilities under construction are located in
-                Batumi, Tbilisi, and Bakuriani. Mardi offers customers both
-                residential and apart-hotel services in both under-construction
-                and completed hospitality complexes.
-              </p>
-            </motion.div>
-          </div>
+          <motion.p
+            className="text-base sm:w-full lg:w-1/2 sm:text-lg md:text-xl text-left leading-relaxed tracking-normal mb-8"
+            variants={{
+              hidden: { opacity: 0, y: 50 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
+            The main field of business of Mardi Holding is construction and
+            development. The facilities under construction are located in
+            Batumi, Tbilisi, and Bakuriani. Mardi offers customers both
+            residential and apart-hotel services in both under-construction
+            and completed hospitality complexes.
+          </motion.p>
         </motion.div>
       </section>
-      
+
       {/* Section 3: Parallax Background */}
       <section
-        className="min-h-[40vh] px-4 sm:px-6 mt-[-60vh] lg:mt-0 md:px-16 bg-white relative z-10"
+        className="min-h-[40vh] px-4 sm:px-6 lg:mt-0 md:px-16 bg-white relative z-10"
         ref={(el) => (sectionRefs.current.section3 = el)}
         data-section="section3"
       >
@@ -304,9 +301,9 @@ const About = React.memo(() => {
               className="w-full h-[85vh] mt-[-5vh] sm:mt-[-10vh] flex justify-start items-center relative text-white bg-cover bg-no-repeat bg-center z-10"
               style={{
                 backgroundImage: "url('/images/cigarr.jpeg')",
-                backgroundPosition: "center", 
+                backgroundPosition: "center",
                 transform: `translate3d(0, ${lerpedScrollY * 0.2}px, 0)`, // Parallax effect
-                backgroundSize: "cover", 
+                backgroundSize: "cover",
                 willChange: lerpedScrollY > 0 ? "transform" : "auto",
               }}
             >
@@ -322,9 +319,9 @@ const About = React.memo(() => {
               className="w-full h-[100vh] p-10 flex justify-end items-center relative text-white bg-cover bg-no-repeat bg-center"
               style={{
                 backgroundImage: "url('/images/wine.webp')",
-                backgroundPosition: "center", 
-                transform: `translate3d(0, ${lerpedScrollY * 0.2}px, 0)`, 
-                backgroundSize: "cover", 
+                backgroundPosition: "center",
+                transform: `translate3d(0, ${lerpedScrollY * 0.2}px, 0)`, // Parallax effect
+                backgroundSize: "cover",
                 willChange: lerpedScrollY > 0 ? "transform" : "auto",
               }}
             >
@@ -361,7 +358,7 @@ const About = React.memo(() => {
           }}
         >
           <motion.h2
-            className="text-3xl sm:text-4xl lg:mt-0 mt-10 md:text-5xl font-semibold text-left mb-5 lg:mb-10"
+            className="text-3xl sm:text-4xl lg:mt-0 mt-10 md:text-5xl font-semibold text-left mb-6"
             variants={{
               hidden: { opacity: 0, x: -50 },
               visible: { opacity: 1, x: 0 },
@@ -370,23 +367,19 @@ const About = React.memo(() => {
           >
             Company Vision and Goals
           </motion.h2>
-          <div className="flex flex-col md:flex-row justify-start items-start space-y-8 md:space-y-0 md:space-x-12">
-            <motion.div
-              className="md:w-1/2 pr-4"
-              variants={{
-                hidden: { opacity: 0, y: 50 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
-              <p className="text-base sm:text-lg mb-[15vh] md:text-xl text-left leading-relaxed tracking-normal">
-                Mardi Holding is led by a young, creative and professional team,
-                which aims to offer customers a big variety of quality products;
-                Our starting point is the protection of the environment and the
-                economic development of the region.
-              </p>
-            </motion.div>
-          </div>
+          <motion.p
+            className="text-base sm:w-full lg:w-1/2 sm:text-lg md:text-xl text-left leading-relaxed tracking-normal mb-[15vh]"
+            variants={{
+              hidden: { opacity: 0, y: 50 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            Mardi Holding is led by a young, creative and professional team,
+            which aims to offer customers a big variety of quality products.
+            Our starting point is the protection of the environment and the
+            economic development of the region.
+          </motion.p>
         </motion.div>
       </section>
     </main>
@@ -394,3 +387,4 @@ const About = React.memo(() => {
 });
 
 export default About;
+
