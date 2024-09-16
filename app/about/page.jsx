@@ -230,6 +230,56 @@ const About = React.memo(() => {
           </div>
         </motion.div>
       </section>
+
+
+      {/* Section 5: Construction and Development */}
+      <section
+        className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white relative z-10"
+        ref={(el) => (sectionRefs.current.section5 = el)}
+        data-section="section5"
+      >
+        <motion.div
+          className="flex flex-col mx-auto max-w-10/12"
+          initial="hidden"
+          animate={visibleSections.section5 ? "visible" : "hidden"}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.5,
+              },
+            },
+          }}
+        >
+          <motion.h2
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-10 lg:mb-20"
+            variants={{
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0 },
+            }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
+            Construction & Development
+          </motion.h2>
+          <div className="flex flex-col md:flex-row justify-between items-start space-y-8 md:space-y-0 md:space-x-12">
+            <motion.div
+              className="md:w-1/2 pr-4 galaxy-fold:w-full"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 1, ease: "easeOut" }}
+            >
+              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
+                The main field of business of Mardi Holding is construction and
+                development. The facilities under construction are located in
+                Batumi, Tbilisi, and Bakuriani. Mardi offers customers both
+                residential and apart-hotel services in both under-construction
+                and completed hospitality complexes.
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
       
       {/* Section 3: Parallax Background */}
       <section
@@ -329,7 +379,7 @@ const About = React.memo(() => {
               }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
+              <p className="text-base sm:text-lg mb-[15vh] md:text-xl text-left leading-relaxed tracking-normal">
                 Mardi Holding is led by a young, creative and professional team,
                 which aims to offer customers a big variety of quality products;
                 Our starting point is the protection of the environment and the
