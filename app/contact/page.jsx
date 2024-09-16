@@ -1,20 +1,21 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import Image from 'next/image'; // For logo optimization
+import Image from 'next/image';
 
 const Contact = () => {
+
+
   return (
     <div className="contact-page">
       {/* Preload Hero Image */}
       <link
         rel="preload"
         as="image"
-        href="/images/contact.jpeg" // Preloading contact.jpeg
+        href="/images/contact.jpeg"
         type="image/jpeg"
-        importance="high"
       />
 
       {/* Hero Section */}
@@ -29,9 +30,11 @@ const Contact = () => {
         {/* Header */}
         <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
           <Link href="/">
-            <img
+            <Image
               src="/images/logo.svg"
               alt="Logo"
+              width={100}
+              height={30}
               className="h-6 sm:h-7 md:h-8"
             />
           </Link>
@@ -50,6 +53,7 @@ const Contact = () => {
             </Link>
           </nav>
         </header>
+
         {/* Updated Overlay Gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/90 to-transparent opacity-90"></div>
 

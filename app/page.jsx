@@ -13,7 +13,9 @@ const DynamicVideoPlayer = dynamic(() => import("./components/VideoPlayer"), {
 
 export default function Home() {
   const containerRef = useRef(null);
-  const observerRef = useRef(null); // Ref for Intersection Observer
+  const observerRef = useRef(null);
+  const loadedVideosRef = useRef([0]);
+
 
   const videoSources = [
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/12e384b7982be56ce1185fec1820fc59/manifest/video.m3u8" },
@@ -54,36 +56,37 @@ export default function Home() {
   const [currentVideo, setCurrentVideo] = useState(videoSources[0]);
   const [prevVideo, setPrevVideo] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [loadedVideos, setLoadedVideos] = useState([0]); // Track which videos are loaded
 
-  
   // Preload the next video when it is about to appear in the viewport
   const preloadNextVideo = useCallback((nextIndex) => {
-    if (nextIndex < videoSources.length) {
-      // Only preload if the next video hasn't been preloaded yet
-      if (!loadedVideos.includes(nextIndex)) {
-        const preloadManifest = document.createElement("link");
-        preloadManifest.rel = "preload";
-        preloadManifest.as = "video";
-        preloadManifest.href = videoSources[nextIndex].hls;
-        document.head.appendChild(preloadManifest);
+    if (nextIndex < videoSources.length && !loadedVideosRef.current.includes(nextIndex)) {
+      const currentVideoElement = document.querySelector('video');
+      if (currentVideoElement && currentVideoElement.readyState > 2) { // Ensure current video is playing
+        const preloadLink = document.createElement("link");
+        preloadLink.rel = "preload";
+        preloadLink.as = "fetch"; // Use fetch for HLS manifests
+        preloadLink.href = videoSources[nextIndex].hls;
+        preloadLink.crossOrigin = "anonymous";
+        document.head.appendChild(preloadLink);
+        loadedVideosRef.current = [...loadedVideosRef.current, nextIndex];
       }
     }
-  }, [loadedVideos, videoSources]);
+  }, [videoSources]);
+  
+  
+  
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const index = parseInt(entry.target.getAttribute("data-index"));
-          if (entry.isIntersecting && !loadedVideos.includes(index)) {
-            setLoadedVideos((prev) => [...prev, index]); // Mark video as loaded
-            // Preload the next video as the user scrolls close to it
+          if (entry.isIntersecting && !loadedVideosRef.current.includes(index)) {
             preloadNextVideo(index + 1); // Preload the next video in sequence
           }
         });
       },
-      { threshold: 0.9 } // Only trigger when 90% of the element is visible
+      { threshold: 0.9 } // Trigger only when 90% of the element is visible
     );
   
     if (containerRef.current) {
@@ -97,7 +100,7 @@ export default function Home() {
         observerRef.current.disconnect();
       }
     };
-  }, [containerRef, loadedVideos, preloadNextVideo]);
+  }, [preloadNextVideo]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -118,23 +121,22 @@ export default function Home() {
   const handleNextThumbnail = useCallback(() => {
     const nextIndex = (activeIndex + 1) % videoSources.length;
     handleClick(nextIndex);
-  }, [activeIndex]);
+  }, [activeIndex, videoSources]);
 
   const handleClick = (index) => {
     if (index !== activeIndex) {
-      setPrevVideo(currentVideo); // Set the previous video before changing
+      setPrevVideo(currentVideo);
       setCurrentVideo(videoSources[index]);
       setActiveIndex(index);
-
+  
       const container = containerRef.current;
       const clickedThumbnail = container.children[index];
-      clickedThumbnail.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
+      clickedThumbnail.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  
+      preloadNextVideo(index + 1); // Preload the next video after setting the current one
     }
   };
+  
 
   const slowSlideInFromLeft = {
     initial: { opacity: 0, x: -200 },
@@ -177,7 +179,6 @@ export default function Home() {
                   muted
                   loop
                   preload="auto"
-                  importance="high" // Prioritize the first video
                   style={{ filter: "brightness(100%) contrast(105%) saturate(100%)" }}
                 />
               </motion.div>
@@ -206,23 +207,39 @@ export default function Home() {
         </div>
 
         <div ref={containerRef} className="absolute bottom-[10vh] left-1/2 transform -translate-x-1/2 flex overflow-x-auto w-full px-[5vw] box-border whitespace-nowrap z-50 scrollbar-none gap-[3vw]">
-          {Array.from({ length: videoSources.length }).map((_, index) => (
-            <motion.div key={index} data-index={index} className={`relative inline-block w-[40vw] sm:w-[20vw] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${activeIndex === index ? "shadow-lg" : ""}`} style={{ border: activeIndex === index ? "2px solid rgba(255, 255, 255, 0.8)" : "2px solid transparent", transition: "all 0.4s ease", borderRadius: "15px" }} whileHover={{ scale: 1.02, boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)", filter: "brightness(1.15)" }} onClick={() => handleClick(index)}>
-              {loadedVideos.includes(index) && (
-                <Image src={`/images/image${index + 1}.webp`} alt={titles[index]} fill sizes="(max-width: 640px) 40vw, (max-width: 1024px) 20vw, 10vw" {...(index === 0 ? { priority: true } : { loading: "lazy" })} style={{ objectFit: "cover", filter: "brightness(0.7) contrast(1.1)" }} />
-              )}
+        {
+  Array.from({ length: videoSources.length }).map((_, index) => (
+    <motion.div 
+      key={index} 
+      data-index={index} 
+      className={`relative inline-block w-[40vw] sm:w-[20vw] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${activeIndex === index ? "shadow-lg" : ""}`} 
+      style={{ border: activeIndex === index ? "2px solid rgba(255, 255, 255, 0.8)" : "2px solid transparent", transition: "all 0.4s ease", borderRadius: "15px" }} 
+      whileHover={{ scale: 1.02, boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)", filter: "brightness(1.15)" }} 
+      onClick={() => handleClick(index)}
+    >
+      {/* Preload the first image with high priority, others with lazy loading */}
+      <Image
+        src={`/images/image${index + 1}.webp`}
+        alt={titles[index]}
+        fill
+        sizes="(max-width: 640px) 40vw, (max-width: 1024px) 20vw, 10vw"
+        priority={index === 0} // Preload first image only
+        loading={index === 0 ? "eager" : "lazy"} // Lazy load the rest
+        style={{ objectFit: "cover", filter: "brightness(0.7) contrast(1.1)" }}
+      />
+      <div className="absolute bottom-0 left-0 right-0 p-[3vw] sm:p-[1vw] text-[3.5vw] sm:text-[1vw] text-center bg-white bg-opacity-15">
+        <div className="text-white text-right">{titles[index]}</div>
+      </div>
 
-              <div className="absolute bottom-0 left-0 right-0 p-[3vw] sm:p-[1vw] text-[3.5vw] sm:text-[1vw] text-center bg-white bg-opacity-15">
-                <div className="text-white text-right">{titles[index]}</div>
-              </div>
+      {activeIndex === index && (
+        <div className="progress-bar-background absolute left-0 right-0 h-[0.4vw] z-[2000] overflow-hidden" style={{ bottom: "0vw" }}>
+          <div className="progress-bar-fill h-full" />
+        </div>
+      )}
+    </motion.div>
+  ))
+}
 
-              {activeIndex === index && (
-                <div className="progress-bar-background absolute left-0 right-0 h-[0.4vw] z-[2000] overflow-hidden" style={{ bottom: "0vw" }}>
-                  <div className="progress-bar-fill h-full" />
-                </div>
-              )}
-            </motion.div>
-          ))}
         </div>
       </div>
 

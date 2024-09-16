@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const About = () => {
   const [visibleSections, setVisibleSections] = useState({
@@ -38,12 +39,13 @@ const About = () => {
       threshold: 0.3,
     });
 
-    Object.values(sectionRefs.current).forEach((section) => {
+    const sections = Object.values(sectionRefs.current);
+    sections.forEach((section) => {
       if (section) observer.observe(section);
     });
 
     return () => {
-      Object.values(sectionRefs.current).forEach((section) => {
+      sections.forEach((section) => {
         if (section) observer.unobserve(section);
       });
     };
@@ -51,16 +53,23 @@ const About = () => {
 
   return (
     <main className="relative w-full overflow-hidden font-primary">
-      {/* Section 1: Hero Section with parallax */}
+      {/* Section 1: Hero Section with lazy loaded background */}
       <section
-        className="min-h-[100vh] w-full bg-cover bg-center relative flex items-center justify-center lg:bg-fixed"
-        style={{
-          backgroundImage: "url('/images/about-poster.jpg')",
-        }}
+        className="min-h-[100vh] w-full relative flex items-center justify-center lg:bg-fixed"
         ref={(el) => (sectionRefs.current.section1 = el)}
         data-section="section1"
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
+
+        {/* Lazy-loaded background image for performance */}
+        <Image
+          src="/images/about-poster.jpg"
+          alt="About Poster"
+          fill
+          priority // Ensure fast loading for hero section
+          style={{ objectFit: "cover" }}
+        />
+
         <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
           <Link href="/">
             <img
@@ -105,7 +114,7 @@ const About = () => {
               hidden: { opacity: 0, x: 50 },
               visible: { opacity: 1, x: 0 },
             }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             About us
           </motion.h2>
@@ -115,7 +124,7 @@ const About = () => {
               hidden: { opacity: 0, x: 50 },
               visible: { opacity: 1, x: 0 },
             }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             MARDI HOLDING
           </motion.h2>
@@ -129,7 +138,7 @@ const About = () => {
         data-section="section2"
       >
         <motion.div
-          className="flex flex-col lg:mt-[10vh] sm:mt-5 mx-auto max-w-10/12"
+          className="flex flex-col mx-auto max-w-10/12"
           initial="hidden"
           animate={visibleSections.section2 ? "visible" : "hidden"}
           variants={{
@@ -146,7 +155,7 @@ const About = () => {
               hidden: { opacity: 0, x: -50 },
               visible: { opacity: 1, x: 0 },
             }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             Our Story
           </motion.h2>
@@ -157,10 +166,10 @@ const About = () => {
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 },
               }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed galaxy-fold:text-balanced tracking-normal">
-                Mardi Holding is a construction and development company that
+              Mardi Holding is a construction and development company that
                 unifies construction, architectural, tourism, transportation and
                 real estate companies, wine and cigar factories, as well as
                 hotel and restaurant complexes. The history of the holding dates
@@ -174,10 +183,10 @@ const About = () => {
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 },
               }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
-                Mardi offered healthy and delicious pastry to Batumi students
+              Mardi offered healthy and delicious pastry to Batumi students
                 for an affordable price. Years later, this success became the
                 basis for a bigger challenge - to establish "Mardi Holding"
                 construction and development company. With a full Georgian
@@ -189,14 +198,14 @@ const About = () => {
         </motion.div>
       </section>
 
-      {/* Section 4: Construction & Development */}
-      <section
+        {/* Section 4: Construction & Development */}
+        <section
         className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white"
         ref={(el) => (sectionRefs.current.section5 = el)}
         data-section="section5"
       >
         <motion.div
-          className="flex flex-col lg:mt-[10vh] mt-0 mx-auto max-w-10/12"
+          className="flex flex-col mx-auto max-w-10/12"
           initial="hidden"
           animate={visibleSections.section5 ? "visible" : "hidden"}
           variants={{
@@ -264,17 +273,16 @@ const About = () => {
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 },
               }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
               style={{
                 backgroundImage: "url('/images/cigarr.jpeg')",
                 backgroundPosition: "end",
               }}
             >
-              {/* Stronger gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
 
               <p className="relative galaxy-fold:w-full z-10 text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left p-10 leading-relaxed tracking-normal">
-                The holding daughter company "Imeri" is the first producer of
+              The holding daughter company "Imeri" is the first producer of
                 Georgian cigars. 29 sorts of cigars and cigarillas are produced
                 from tobacco leaves grown in Adjara, Keda.
               </p>
@@ -287,32 +295,27 @@ const About = () => {
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 },
               }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
               style={{
                 backgroundImage: "url('/images/wine.webp')",
                 backgroundPosition: "start",
               }}
             >
-              {/* Stronger gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
-
               <p className="relative z-10 galaxy-fold:w-full text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left leading-relaxed tracking-normal">
-                The outstanding brand of the company is "Adjara Wine House", a
+              The outstanding brand of the company is "Adjara Wine House", a
                 chateau-type restaurant, which includes a winery, enotheque,
                 ethnographic museum, cellar, and a restaurant. Here, in the
                 beautiful nature, by the river, you will get acquainted with the
                 ancient Georgian traditions, taste the most delicious wine and
-                Georgian dishes; You will learn the technologies of grape
-                growing and wine production. Only here you can taste and buy
-                locally produced wines, which are distinguished by their
-                uniqueness, traditional production technologies.
+                Georgian dishes.
               </p>
             </motion.div>
           </div>
         </motion.div>
       </section>
 
-      
+    
 
       {/* Final Section without background image */}
       <section
@@ -338,7 +341,7 @@ const About = () => {
               hidden: { opacity: 0, x: -50 },
               visible: { opacity: 1, x: 0 },
             }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             Company Vision and Goals
           </motion.h2>
@@ -349,15 +352,13 @@ const About = () => {
                 hidden: { opacity: 0, y: 50 },
                 visible: { opacity: 1, y: 0 },
               }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <p className="text-base galaxy-fold:w-full sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
                 Mardi Holding is led by a young, creative and professional team,
                 which aims to offer customers a big variety of quality products;
                 Our starting point is the protection of the environment and the
-                economic development of the region. We aim to provide employment
-                spots and ensure local and foreign investments in Adjara, which
-                contributes to the well-being of the population.
+                economic development of the region.
               </p>
             </motion.div>
           </div>

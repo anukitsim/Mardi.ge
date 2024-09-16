@@ -1,47 +1,42 @@
 import { useEffect, useRef } from "react";
 import Hls from "hls.js";
 
-const VideoPlayer = ({ sources, className, autoPlay = true, muted = true, loop = true, preload = "auto", style }) => {
+const VideoPlayer = ({ sources, className, autoPlay = true, muted = true, loop = true, preload = "auto", style, importance = "auto" }) => {
   const videoRef = useRef(null);
   let hls;
 
   const setupHls = () => {
     if (Hls.isSupported() && sources.hls) {
       hls = new Hls({
-        lowLatencyMode: true, // Reduce latency for faster load
-        startLevel: -1, // Start with automatic quality level but quickly scale to max quality
-        maxMaxBufferLength: 60, // Increase buffer length to avoid frequent quality changes
-        capLevelToPlayerSize: false, // Allow playing the highest possible quality, even if the screen is small
-        autoStartLoad: true, // Start loading immediately
-        enableWorker: true, // Use Web Workers for smooth experience
-        // Ensure level capping is disabled if you want higher quality regardless of screen size
+        lowLatencyMode: importance === "high", // Use low latency for the first video
+        startLevel: -1, // Let HLS.js decide the start level based on network conditions
+        maxMaxBufferLength: importance === "high" ? 60 : 30, // Increase buffer for smooth playback
+        capLevelToPlayerSize: true, // Adjust video quality to player size
+        autoStartLoad: true, // Start loading video immediately
+        enableWorker: true, // Use Web Workers for parsing and decoding
       });
 
       hls.loadSource(sources.hls);
       hls.attachMedia(videoRef.current);
 
+      // Ensure video plays when enough data is buffered
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        videoRef.current.play();
+        videoRef.current.addEventListener('canplaythrough', () => {
+          videoRef.current.play();
+        });
       });
 
       // Immediately switch to the highest quality after video starts playing
       hls.on(Hls.Events.FRAG_LOADED, () => {
         if (hls.autoLevelEnabled) {
-          hls.currentLevel = hls.levels.length - 1; // Switch to the highest available quality
-        }
-      });
-
-      // Log the current quality level
-      hls.on(Hls.Events.LEVEL_SWITCHED, () => {
-        const currentLevel = hls.currentLevel;
-        const levels = hls.levels;
-
-        if (levels && levels[currentLevel]) {
-          console.log(`Current Quality Level: ${levels[currentLevel].height}p`);
+          hls.currentLevel = hls.levels.length - 1; // Ensure maximum quality is loaded
         }
       });
     } else if (videoRef.current.canPlayType("application/vnd.apple.mpegurl")) {
       videoRef.current.src = sources.hls;
+      videoRef.current.addEventListener('canplaythrough', () => {
+        videoRef.current.play();
+      });
     }
   };
 
@@ -50,13 +45,13 @@ const VideoPlayer = ({ sources, className, autoPlay = true, muted = true, loop =
     return () => {
       if (hls) hls.destroy();
     };
-  }, [sources]);
+  }, [sources, importance]);
 
   return (
     <video
       ref={videoRef}
       className={className}
-      autoPlay={autoPlay}
+      autoPlay={false} // Wait until the video is ready before playing
       muted={muted}
       loop={loop}
       preload={preload}
