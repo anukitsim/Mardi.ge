@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { throttle } from 'lodash';
 
+// Linear interpolation function for smoother scrolling
+const lerp = (start, end, factor) => start + (end - start) * factor;
 
 const About = React.memo(() => {
   const [visibleSections, setVisibleSections] = useState({
@@ -54,58 +55,30 @@ const About = React.memo(() => {
   }, [handleIntersection]);
 
   const [scrollY, setScrollY] = useState(0);
+  const [lerpedScrollY, setLerpedScrollY] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
+    let animationFrame;
+    let lastScrollY = 0;
+
+    const handleSmoothScroll = () => {
+      const targetScrollY = window.scrollY;
+
+      // Lerp for smoother scroll transition
+      lastScrollY = lerp(lastScrollY, targetScrollY, 0.1);
+      setLerpedScrollY(lastScrollY);
+
+      animationFrame = requestAnimationFrame(handleSmoothScroll);
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", () => {
+      cancelAnimationFrame(animationFrame); // Stop previous animation
+      animationFrame = requestAnimationFrame(handleSmoothScroll);
+    });
+
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  // Parallax effect for the background without background-attachment: fixed
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      requestAnimationFrame(() => {
-        if (sectionRefs.current.section1) {
-          sectionRefs.current.section1.style.transform = `translateY(${
-            scrollPosition * 0.3
-          }px)`;
-        }
-      });
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-
-  useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (sectionRefs.current.section1) {
-            sectionRefs.current.section1.style.transform = `translateY(${
-              scrollPosition * 0.3
-            }px)`;
-          }
-          ticking = false; // Allows next frame
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleSmoothScroll);
+      cancelAnimationFrame(animationFrame); // Cleanup
     };
   }, []);
 
@@ -124,7 +97,7 @@ const About = React.memo(() => {
             layout="fill"
             objectFit="cover"
             quality={75}
-            
+            priority // Faster loading on this hero image
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80 z-20"></div>
@@ -137,6 +110,7 @@ const About = React.memo(() => {
               width={100}
               height={30}
               className="h-6 sm:h-7 md:h-8"
+              priority={false} // Defer loading for less critical images
             />
           </Link>
           <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
@@ -280,10 +254,10 @@ const About = React.memo(() => {
               className="w-full h-[85vh] mt-[-5vh] sm:mt-[-10vh] flex justify-start items-center relative text-white bg-cover bg-no-repeat bg-center z-10"
               style={{
                 backgroundImage: "url('/images/cigarr.jpeg')",
-                backgroundPosition: "center", // Centered for responsive design
-                transform: `translate3d(0, ${scrollY * 0.2}px, 0)`, // Parallax effect
-                backgroundSize: 'cover', // Ensure the background covers fully
-                willChange: scrollY > 0 ? "transform" : "auto",
+                backgroundPosition: "center", 
+                transform: `translate3d(0, ${lerpedScrollY * 0.2}px, 0)`, // Parallax effect
+                backgroundSize: "cover", 
+                willChange: lerpedScrollY > 0 ? "transform" : "auto",
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
@@ -298,10 +272,10 @@ const About = React.memo(() => {
               className="w-full h-[100vh] p-10 flex justify-end items-center relative text-white bg-cover bg-no-repeat bg-center"
               style={{
                 backgroundImage: "url('/images/wine.webp')",
-                backgroundPosition: "center", // Center the image
-                transform: `translate3d(0, ${scrollY * 0.2}px, 0)`, // Parallax effect for wine image
-                backgroundSize: "cover", // Ensure the image covers the container fully
-                willChange: scrollY > 0 ? "transform" : "auto",
+                backgroundPosition: "center", 
+                transform: `translate3d(0, ${lerpedScrollY * 0.2}px, 0)`, 
+                backgroundSize: "cover", 
+                willChange: lerpedScrollY > 0 ? "transform" : "auto",
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
