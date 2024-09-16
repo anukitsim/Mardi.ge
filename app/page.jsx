@@ -14,7 +14,10 @@ const DynamicVideoPlayer = dynamic(() => import("./components/VideoPlayer"), {
 export default function Home() {
   const containerRef = useRef(null);
   const observerRef = useRef(null);
-  const loadedVideosRef = useRef([0]);
+ 
+
+
+  const loadedVideosRef = useRef(new Set());
 
 
   const videoSources = [
@@ -59,49 +62,43 @@ export default function Home() {
 
   // Preload the next video when it is about to appear in the viewport
   const preloadNextVideo = useCallback((nextIndex) => {
-    if (nextIndex < videoSources.length && !loadedVideosRef.current.includes(nextIndex)) {
-      const currentVideoElement = document.querySelector('video');
-      if (currentVideoElement && currentVideoElement.readyState > 2) { // Ensure current video is playing
-        const preloadLink = document.createElement("link");
-        preloadLink.rel = "preload";
-        preloadLink.as = "fetch"; // Use fetch for HLS manifests
-        preloadLink.href = videoSources[nextIndex].hls;
-        preloadLink.crossOrigin = "anonymous";
-        document.head.appendChild(preloadLink);
-        loadedVideosRef.current = [...loadedVideosRef.current, nextIndex];
-      }
+    if (nextIndex < videoSources.length && !loadedVideosRef.current.has(nextIndex)) { // Use .has() here
+      const preloadLink = document.createElement("link");
+      preloadLink.rel = "preload";
+      preloadLink.as = "fetch"; // Use fetch for HLS manifests
+      preloadLink.href = videoSources[nextIndex].hls;
+      preloadLink.crossOrigin = "anonymous";
+      document.head.appendChild(preloadLink);
+  
+      // Add the preloaded video to the Set
+      loadedVideosRef.current.add(nextIndex); // Use Set's .add()
     }
-  }, [videoSources]);
+  }, []); 
   
   
   
 
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const index = parseInt(entry.target.getAttribute("data-index"));
-          if (entry.isIntersecting && !loadedVideosRef.current.includes(index)) {
-            preloadNextVideo(index + 1); // Preload the next video in sequence
+          // Replace .includes() with .has() for Set
+          if (entry.isIntersecting && !loadedVideosRef.current.has(index)) {
+            preloadNextVideo(index + 1); // Preload the next video
           }
         });
       },
-      { threshold: 0.9 } // Trigger only when 90% of the element is visible
+      { threshold: 0.9 } // Trigger when 90% of the element is visible
     );
   
-    if (containerRef.current) {
-      Array.from(containerRef.current.children).forEach((thumbnail) => {
-        observerRef.current.observe(thumbnail);
-      });
-    }
+    const thumbnails = Array.from(containerRef.current.children);
+    thumbnails.forEach((thumbnail) => observer.observe(thumbnail));
   
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
+    return () => observer.disconnect();
   }, [preloadNextVideo]);
 
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       handleNextThumbnail();
@@ -123,11 +120,13 @@ export default function Home() {
     handleClick(nextIndex);
   }, [activeIndex, videoSources]);
 
-  const handleClick = (index) => {
+  const handleClick = useCallback((index) => {
     if (index !== activeIndex) {
       setPrevVideo(currentVideo);
       setCurrentVideo(videoSources[index]);
       setActiveIndex(index);
+
+      console.log('Current video changed:', videoSources[index]); // Logs new video source
   
       const container = containerRef.current;
       const clickedThumbnail = container.children[index];
@@ -135,7 +134,7 @@ export default function Home() {
   
       preloadNextVideo(index + 1); // Preload the next video after setting the current one
     }
-  };
+  }, [activeIndex, currentVideo, videoSources, preloadNextVideo]);
   
 
   const slowSlideInFromLeft = {

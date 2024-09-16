@@ -23,6 +23,8 @@ const About = () => {
     section5: null,
   });
 
+  
+
   const pathname = usePathname();
 
   const handleIntersection = useCallback((entries) => {
@@ -247,75 +249,89 @@ const About = () => {
         </motion.div>
       </section>
 
-      {/* Section 3: Parallax background with two text sections */}
-      <section
-        className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white"
-        ref={(el) => (sectionRefs.current.section3 = el)}
-        data-section="section3"
+      import Image from 'next/image';
+import { motion } from 'framer-motion';
+
+{/* Section 3: Parallax background with two text sections */}
+<section
+  className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white"
+  ref={(el) => (sectionRefs.current.section3 = el)}
+  data-section="section3"
+>
+  <motion.div
+    className="flex flex-col mx-auto max-w-10/12"
+    initial="hidden"
+    animate={visibleSections.section3 ? "visible" : "hidden"}
+    variants={{
+      visible: {
+        transition: {
+          staggerChildren: 0.5,
+        },
+      },
+    }}
+  >
+    <div className="flex flex-col items-start space-y-12">
+      {/* First motion div with stronger gradient overlay */}
+      <motion.div
+        className="w-full h-[85vh] flex justify-start items-center relative text-white"
+        variants={{
+          hidden: { opacity: 0, y: 50 },
+          visible: { opacity: 1, y: 0 },
+        }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <motion.div
-          className="flex flex-col mx-auto max-w-10/12"
-          initial="hidden"
-          animate={visibleSections.section3 ? "visible" : "hidden"}
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.5,
-              },
-            },
-          }}
-        >
-          <div className="flex flex-col items-start space-y-12">
-            {/* First motion div with stronger gradient overlay */}
-            <motion.div
-              className="w-full h-[85vh] flex justify-start items-center relative text-white bg-cover bg-no-repeat bg-center lg:bg-fixed"
-              variants={{
-                hidden: { opacity: 0, y: 50 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              style={{
-                backgroundImage: "url('/images/cigarr.jpeg')",
-                backgroundPosition: "end",
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
+        <div className="absolute inset-0">
+          <Image
+            src="/images/cigarr.jpeg"
+            alt="Cigars"
+            layout="fill"
+            objectFit="cover"
+            objectPosition="end"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
+        </div>
 
-              <p className="relative galaxy-fold:w-full z-10 text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left p-10 leading-relaxed tracking-normal">
-              The holding daughter company "Imeri" is the first producer of
-                Georgian cigars. 29 sorts of cigars and cigarillas are produced
-                from tobacco leaves grown in Adjara, Keda.
-              </p>
-            </motion.div>
+        <p className="relative galaxy-fold:w-full z-10 text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left p-10 leading-relaxed tracking-normal">
+          The holding daughter company "Imeri" is the first producer of
+          Georgian cigars. 29 sorts of cigars and cigarillas are produced
+          from tobacco leaves grown in Adjara, Keda.
+        </p>
+      </motion.div>
 
-            {/* Second motion div with stronger gradient overlay */}
-            <motion.div
-              className="w-full h-[85vh] p-10 flex justify-end items-center relative text-white bg-cover bg-no-repeat bg-center lg:bg-fixed"
-              variants={{
-                hidden: { opacity: 0, y: 50 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              style={{
-                backgroundImage: "url('/images/wine.webp')",
-                backgroundPosition: "start",
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
-              <p className="relative z-10 galaxy-fold:w-full text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left leading-relaxed tracking-normal">
-              The outstanding brand of the company is "Adjara Wine House", a
-                chateau-type restaurant, which includes a winery, enotheque,
-                ethnographic museum, cellar, and a restaurant. Here, in the
-                beautiful nature, by the river, you will get acquainted with the
-                ancient Georgian traditions, taste the most delicious wine and
-                Georgian dishes.
-              </p>
-            </motion.div>
-          </div>
-        </motion.div>
-      </section>
+      {/* Second motion div with stronger gradient overlay */}
+      <motion.div
+        className="w-full h-[85vh] p-10 flex justify-end items-center relative text-white"
+        variants={{
+          hidden: { opacity: 0, y: 50 },
+          visible: { opacity: 1, y: 0 },
+        }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <div className="absolute inset-0">
+          <Image
+            src="/images/wine.webp"
+            alt="Wine"
+            layout="fill"
+            objectFit="cover"
+            objectPosition="start"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
+        </div>
+        <p className="relative z-10 galaxy-fold:w-full text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left leading-relaxed tracking-normal">
+          The outstanding brand of the company is "Adjara Wine House", a
+          chateau-type restaurant, which includes a winery, enotheque,
+          ethnographic museum, cellar, and a restaurant. Here, in the
+          beautiful nature, by the river, you will get acquainted with the
+          ancient Georgian traditions, taste the most delicious wine and
+          Georgian dishes.
+        </p>
+      </motion.div>
+    </div>
+  </motion.div>
+</section>
 
-    
 
       {/* Final Section without background image */}
       <section
