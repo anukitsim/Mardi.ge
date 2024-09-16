@@ -46,9 +46,9 @@ export default function Home() {
     "https://www.mardi.ge/",
     "https://awh.ge/en",
     "https://travelab.ge/",
-    "/in-development",
+    "/Mardi-Energy",
     "https://cigar.ge/",
-    "/in-development",
+    "/Mardi-Comfort",
   ];
 
   const [currentVideo, setCurrentVideo] = useState(videoSources[0]);
