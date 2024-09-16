@@ -58,7 +58,7 @@ export default function Home() {
   // Preload the first video aggressively on page load
   useEffect(() => {
     preloadFirstVideo();
-    preloadRemainingVideos();  // Preload subsequent videos in the background
+   
   }, []);
 
   const preloadVideoSegments = (videoUrl, segmentCount = 2) => {
@@ -73,19 +73,12 @@ export default function Home() {
     }
   };
 
-  // Preload the first video aggressively
   const preloadFirstVideo = () => {
-    preloadNextVideo(0);  // Preload the first .m3u8 file
-    preloadVideoSegments(videoSources[0].hls, 3);  // Preload first 3 segments for fast start
+    preloadNextVideo(0); // Preload the first .m3u8 file
+    preloadVideoSegments(videoSources[0].hls, 3); // Preload the first 3 segments for fast start
   };
+  
 
-  // Preload remaining videos after the first one
-  const preloadRemainingVideos = () => {
-    for (let i = 1; i < videoSources.length; i++) {
-      preloadNextVideo(i);  // Preload .m3u8 file for each video
-      preloadVideoSegments(videoSources[i].hls, 2);  // Preload first 2 segments for subsequent videos
-    }
-  };
 
   // Preload the next video's manifest
   const preloadNextVideo = useCallback((index) => {
@@ -109,30 +102,44 @@ export default function Home() {
   }, [activeIndex]);
 
   useEffect(() => {
-    if (prevVideo) {
-      const timeout = setTimeout(() => {
-        setPrevVideo(null);
-      }, 1000); // Transition duration
-      return () => clearTimeout(timeout);
-    }
-  }, [prevVideo]);
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % videoSources.length;
+        preloadNextVideo(nextIndex); // Preload the next video after the switch
+        setCurrentVideo(videoSources[nextIndex]); // Set the next video as current
+        return nextIndex; // Update activeIndex
+      });
+    }, 10000); // Switch videos every 10 seconds
+  
+    return () => clearInterval(interval); // Clear the interval on component unmount
+  }, [videoSources.length]); // Dependency array only includes videoSources length
+  
 
   const handleNextThumbnail = useCallback(() => {
-    const nextIndex = (activeIndex + 1) % videoSources.length;
-    handleClick(nextIndex);
-  }, [activeIndex, videoSources]);
+    setActiveIndex((prevIndex) => {
+      const nextIndex = (prevIndex + 1) % videoSources.length;
+      preloadNextVideo(nextIndex); // Lazy load the next video when switching
+      setCurrentVideo(videoSources[nextIndex]); // Set next video as current
+      return nextIndex;
+    });
+  }, [videoSources.length]);
+  
+  
 
   const handleClick = useCallback((index) => {
     if (index !== activeIndex) {
       setPrevVideo(currentVideo);
-      setCurrentVideo(videoSources[index]);
+      setCurrentVideo(videoSources[index]); // Set new video lazily
       setActiveIndex(index);
-
+  
+      preloadNextVideo(index); // Lazy load this video
+  
       const container = containerRef.current;
       const clickedThumbnail = container.children[index];
       clickedThumbnail.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     }
   }, [activeIndex, currentVideo, videoSources]);
+  
 
   const slowSlideInFromLeft = {
     initial: { opacity: 0, x: -200 },
