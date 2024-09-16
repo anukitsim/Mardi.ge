@@ -9,6 +9,7 @@ import dynamic from "next/dynamic";
 // Memoize the DynamicVideoPlayer to prevent unnecessary re-renders
 const DynamicVideoPlayer = memo(dynamic(() => import("./components/VideoPlayer"), {
   ssr: false, // Disable server-side rendering to load after the page is interactive
+  loading: () => <div className="loading-placeholder">Loading...</div> // Placeholder to display during load
 }));
 
 export default function Home() {
@@ -53,9 +54,10 @@ export default function Home() {
 
   const [currentVideo, setCurrentVideo] = useState(videoSources[0]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [preloadedFirstVideo, setPreloadedFirstVideo] = useState(false);
 
   // Preload only a few video segments to optimize load time
-  const preloadVideoSegments = (videoUrl, segmentCount = 2) => {
+  const preloadVideoSegments = (videoUrl, segmentCount = 1) => {
     for (let i = 1; i <= segmentCount; i++) {
       const segmentUrl = `${videoUrl}/seg_${i}.ts`;
       const preloadLink = document.createElement('link');
@@ -68,8 +70,8 @@ export default function Home() {
 
   const preloadFirstVideo = () => {
     preloadNextVideo(0); // Preload the first video
-    preloadNextVideo(1); // Preload the second video
-    preloadVideoSegments(videoSources[0].hls, 3); // Preload first 3 segments
+    preloadVideoSegments(videoSources[0].hls, 1); // Preload only the first segment
+    setPreloadedFirstVideo(true);
   };
 
   // Preload the next video in the sequence
@@ -121,6 +123,13 @@ export default function Home() {
     return () => clearInterval(interval); // Clear interval on unmount
   }, [handleNextThumbnail]);
 
+  useEffect(() => {
+    // Only preload the first video after the page is interactive
+    if (!preloadedFirstVideo) {
+      preloadFirstVideo();
+    }
+  }, [preloadedFirstVideo]);
+
   const handleClick = useCallback((index) => {
     if (index !== activeIndex) {
       setCurrentVideo(videoSources[index]);
@@ -136,17 +145,6 @@ export default function Home() {
       });
     }
   }, [activeIndex, videoSources, preloadNextVideo]);
-
-  // Define the slow slide-in animation for text
-  const slowSlideInFromLeft = {
-    initial: { opacity: 0, x: -200 },
-    animate: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 1.5, ease: "easeOut" },
-    },
-    exit: { opacity: 0, x: -200, transition: { duration: 0.7, ease: "easeIn" } },
-  };
 
   return (
     <main className="relative w-full min-h-screen h-screen overflow-hidden font-primary">
@@ -198,12 +196,12 @@ export default function Home() {
           <div className="overlay absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3))" }}></div>
 
           <AnimatePresence>
-            <motion.div key={activeIndex} className="absolute left-[5vw] top-[18vh] text-white z-20" initial="initial" animate="animate" exit="exit" variants={slowSlideInFromLeft}>
-              <motion.h1 className="text-[5vw] sm:text-[2.5vw] uppercase font-regular mb-[2vw] leading-tight tracking-tight text-shadow-strong" variants={slowSlideInFromLeft}>
+            <motion.div key={activeIndex} className="absolute left-[5vw] top-[18vh] text-white z-20" initial="initial" animate="animate" exit="exit">
+              <motion.h1 className="text-[5vw] sm:text-[2.5vw] uppercase font-regular mb-[2vw] leading-tight tracking-tight text-shadow-strong">
                 {titles[activeIndex]}
               </motion.h1>
 
-              <motion.p className="description mt-[3vh] text-[4vw] sm:text-[1.2vw] max-w-[55vw] font-regular leading-normal tracking-wide text-shadow-strong" variants={slowSlideInFromLeft}>
+              <motion.p className="description mt-[3vh] text-[4vw] sm:text-[1.2vw] max-w-[55vw] font-regular leading-normal tracking-wide text-shadow-strong">
                 {descriptions[activeIndex]}
               </motion.p>
 
