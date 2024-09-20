@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import IntroScreen from "./components/IntroScreen";
 
 // Memoize the DynamicVideoPlayer to prevent unnecessary re-renders
 const DynamicVideoPlayer = memo(dynamic(() => import("./components/VideoPlayer"), {
@@ -16,13 +17,15 @@ export default function Home() {
   const containerRef = useRef(null);
   const loadedVideosRef = useRef(new Set());
 
+  
+
   const videoSources = [
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/88fed3cec9a344f16384026c852d1aa9/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/b8426a1bf1ba0d5690f2778538bfbeb7/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/23044072623a8a914ea8360a01945207/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/1624211b3a61d0f8ab0e424b30c5d566/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/9291ab43985f550be5c0e27049098583/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/85be995f6fb1b3b1935e6b552f2ff8c3/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/7290c07cdc32831675675939eb4b361f/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/6c43f158d1d61c502d9ae7a3a0a35b9c/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/3be1d3e3558f023c4f9801d2c50c98a8/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/8cc0d687b8c9dff9d480aa3b6b7a104a/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/796906c6cdcaab891fe4b4b6b8678dbb/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/656f09909a1970c52a3b58af39a74593/manifest/video.m3u8" },
   ];
 
   const titles = [
@@ -215,34 +218,40 @@ export default function Home() {
         </div>
 
         <div ref={containerRef} className="absolute bottom-[10vh] left-1/2 transform -translate-x-1/2 flex overflow-x-auto w-full px-[5vw] box-border whitespace-nowrap z-50 scrollbar-none gap-[3vw]">
-          {Array.from({ length: videoSources.length }).map((_, index) => (
-            <motion.div 
-              key={index} 
-              data-index={index} 
-              className={`relative inline-block w-[40vw] sm:w-[20vw] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${activeIndex === index ? "shadow-lg" : ""}`} 
-              style={{ border: activeIndex === index ? "2px solid rgba(255, 255, 255, 0.8)" : "2px solid transparent", transition: "all 0.4s ease", borderRadius: "15px" }} 
-              whileHover={{ scale: 1.02, boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)", filter: "brightness(1.15)" }} 
-              onClick={() => handleClick(index)}
-            >
-              <Image
-                src={`/images/image${index + 1}.webp`}
-                alt={titles[index]}
-                fill
-                sizes="(max-width: 640px) 40vw, (max-width: 1024px) 20vw, 10vw"
-                priority={index === 0 ? "eager" : "lazy"} // Lazy load the rest
-                style={{ objectFit: "cover", filter: "brightness(0.7) contrast(1.1)" }}
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-[3vw] sm:p-[1vw] text-[3.5vw] sm:text-[1vw] text-center bg-white bg-opacity-15">
-                <div className="text-white text-right">{titles[index]}</div>
-              </div>
+       {Array.from({ length: videoSources.length }).map((_, index) => {
+  
+  return (
+    <motion.div 
+      key={index} 
+      data-index={index} 
+      className={`relative inline-block w-[40vw] sm:w-[20vw] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${activeIndex === index ? "shadow-lg" : ""}`} 
+      style={{ border: activeIndex === index ? "2px solid rgba(255, 255, 255, 0.8)" : "2px solid transparent", transition: "all 0.4s ease", borderRadius: "15px" }} 
+      whileHover={{ scale: 1.02, boxShadow: "0 8px 30px rgba(0, 0, 0, 0.2)", filter: "brightness(1.15)" }} 
+      onClick={() => handleClick(index)} // Closing properly here
+    >
+      <Image
+        src={`/images/image${index + 1}-new.webp`}  // Ensure index+1 here to match image1 to image6
+        alt={titles[index]}
+        fill="true"  // fill should be a boolean string in JSX
+        sizes="(max-width: 640px) 40vw, (max-width: 1024px) 20vw, 10vw"
+        priority={index === 0 ? "eager" : "lazy"}
+        style={{ objectFit: "cover", filter: "brightness(0.7) contrast(1.1)" }}
+      />
+      <div className="absolute bottom-0 left-0 right-0 p-[3vw] sm:p-[1vw] text-[3.5vw] sm:text-[1vw] text-center bg-white bg-opacity-15">
+        <div className="text-white text-right">{titles[index]}</div>
+      </div>
 
-              {activeIndex === index && (
-                <div className="progress-bar-background absolute left-0 right-0 h-[0.4vw] z-[2000] overflow-hidden" style={{ bottom: "0vw" }}>
-                  <div className="progress-bar-fill h-full" />
-                </div>
-              )}
-            </motion.div>
-          ))}
+      {activeIndex === index && (
+        <div className="progress-bar-background absolute left-0 right-0 h-[0.4vw] z-[2000] overflow-hidden" style={{ bottom: "0vw" }}>
+          <div className="progress-bar-fill h-full" />
+        </div>
+      )}
+    </motion.div>
+  );
+})}
+
+
+
         </div>
       </div>
 
