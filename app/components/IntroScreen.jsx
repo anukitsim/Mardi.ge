@@ -1,6 +1,5 @@
-"use client"
+"use client";
 
-// components/IntroScreen.jsx
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -8,35 +7,33 @@ import Image from 'next/image';
 export default function IntroScreen({ onIntroEnd }) {
   const [isIntroComplete, setIsIntroComplete] = useState(false);
 
-  // This effect hides the intro after the parent signals it's ready
   useEffect(() => {
     if (isIntroComplete) {
-      if (onIntroEnd) onIntroEnd();  // Call the callback when intro finishes
+      if (onIntroEnd) onIntroEnd(); // Call the callback when intro finishes
     }
   }, [isIntroComplete, onIntroEnd]);
 
-  // Manually trigger the end of the intro when the parent tells us
-  const endIntro = () => {
-    setIsIntroComplete(true);
-  };
+  // Automatically hide the intro screen after 5 seconds (as fallback)
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsIntroComplete(true);
+    }, 5000); // Fallback after 5 seconds
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
-    <div className={`fixed inset-0 flex items-center justify-center bg-gray-500 ${isIntroComplete ? 'hidden' : ''}`}>
+    <div className={`fixed inset-0 flex items-center justify-center bg-gradient-to-br from-white via-gray-300 to-gray-500 bg-opacity-90 backdrop-blur-xl ${isIntroComplete ? 'hidden' : ''}`}>
       <motion.div
-        initial={{ scale: 0.3, opacity: 0 }}  // Start smaller (0.3)
-        animate={{
-          scale: [0.3, 0.5, 0.45],  // Subtle scale from 0.3 to 0.5 with a bounce to 0.45
-          opacity: [0, 1, 1],  // Fade in
-        }}
+        initial={{ scale: 1 }} // Start at normal size
+        animate={{ scale: [1, 1.1, 1] }} // Continuous bounce between 1 and 1.1 scale
         transition={{
-          duration: 4,  // Animation duration
-          ease: 'easeInOut',
-          times: [0, 0.8, 1],  // Bounce effect timing
-          repeat: Infinity,  // Keep the bounce effect looping
-          repeatType: 'reverse',
+          duration: 1, // Time for one bounce cycle
+          ease: "easeInOut", // Smooth bounce
+          repeat: Infinity, // Repeat the bounce indefinitely
         }}
+        style={{ opacity: 1 }} // Ensure opacity remains constant
       >
-        <Image src="/images/logo.svg" alt="Logo" width={150} height={50} />  {/* Smaller Logo */}
+        <Image src="/images/logo.svg" alt="Logo" width={70} height={20} /> {/* Small Logo */}
       </motion.div>
     </div>
   );
