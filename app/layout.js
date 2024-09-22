@@ -1,5 +1,5 @@
 import "./globals.css";
-import Head from "next/head";
+
 
 
 export const metadata = {
@@ -10,14 +10,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Head>
-        {/* Preconnect and DNS-prefetch for faster resource resolution */}
-        <link rel="preconnect" href="https://customer-s2m96v0a16zk0okb.cloudflarestream.com" />
-        <link rel="dns-prefetch" href="https://customer-s2m96v0a16zk0okb.cloudflarestream.com" />
-
-        {/* Preload essential fonts with lower priority */}
-        <link rel="preload" href="/fonts/your-font.woff2" as="font" type="font/woff2" crossOrigin="anonymous" importance="low" />
-      </Head>
+ 
 
       <body>
         {children}

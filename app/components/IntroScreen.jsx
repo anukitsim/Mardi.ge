@@ -13,27 +13,31 @@ export default function IntroScreen({ onIntroEnd }) {
     }
   }, [isIntroComplete, onIntroEnd]);
 
-  // Automatically hide the intro screen after 5 seconds (as fallback)
+  // Increase the intro duration to 8 seconds
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsIntroComplete(true);
-    }, 5000); // Fallback after 5 seconds
+    }, 8000); // Adjust the duration as needed
     return () => clearTimeout(timeout);
   }, []);
 
   return (
-    <div className={`fixed inset-0 flex items-center justify-center bg-gradient-to-br from-white via-gray-300 to-gray-500 bg-opacity-90 backdrop-blur-xl ${isIntroComplete ? 'hidden' : ''}`}>
+    <div className={`fixed inset-0 flex items-center justify-center ${isIntroComplete ? 'hidden' : ''}`}>
+      {/* Background gradient for the entire screen */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-900 to-black z-0"></div>
+      
+      {/* Motion wrapper for the logo */}
       <motion.div
-        initial={{ scale: 1 }} // Start at normal size
-        animate={{ scale: [1, 1.1, 1] }} // Continuous bounce between 1 and 1.1 scale
+        initial={{ scale: 1 }}
+        animate={{ scale: [1, 1.1, 1] }}
         transition={{
-          duration: 1, // Time for one bounce cycle
-          ease: "easeInOut", // Smooth bounce
-          repeat: Infinity, // Repeat the bounce indefinitely
+          duration: 2, // Increase the animation duration
+          ease: "easeInOut",
+          repeat: Infinity,
         }}
-        style={{ opacity: 1 }} // Ensure opacity remains constant
+        className="relative z-10"
       >
-        <Image src="/images/logo.svg" alt="Logo" width={70} height={20} /> {/* Small Logo */}
+        <Image src="/images/logo.svg" alt="Logo" width={70} height={20} />
       </motion.div>
     </div>
   );
