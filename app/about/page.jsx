@@ -27,6 +27,8 @@ const About = React.memo(() => {
   });
 
   const pathname = usePathname();
+  const [scrollY, setScrollY] = useState(0);
+  const [lerpedScrollY, setLerpedScrollY] = useState(0);
 
   const handleIntersection = useCallback((entries) => {
     entries.forEach((entry) => {
@@ -54,8 +56,20 @@ const About = React.memo(() => {
     };
   }, [handleIntersection]);
 
-  const [scrollY, setScrollY] = useState(0);
-  const [lerpedScrollY, setLerpedScrollY] = useState(0);
+  // Parallax scroll effect
+  const handleParallaxScroll = useCallback(() => {
+    const parallaxElement = sectionRefs.current.section1;
+    if (parallaxElement) {
+      const scrollPosition = window.scrollY;
+      const offset = scrollPosition * 0.5; // Adjust speed factor here
+      parallaxElement.style.transform = `translateY(${offset}px)`; // Move background
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleParallaxScroll);
+    return () => window.removeEventListener("scroll", handleParallaxScroll);
+  }, [handleParallaxScroll]);
 
   useEffect(() => {
     let animationFrame;
@@ -90,7 +104,7 @@ const About = React.memo(() => {
         ref={(el) => (sectionRefs.current.section1 = el)}
         data-section="section1"
       >
-        <div className="absolute inset-0 z-10">
+        <div className="absolute inset-0 z-10 parallax-background" style={{ backgroundPositionY: lerpedScrollY * 0.5 }}>
           <Image
             src="/images/about-poster.jpg"
             alt="About Poster"
@@ -122,7 +136,7 @@ const About = React.memo(() => {
             </Link>
             <Link
               href="/about"
-              className={`relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full`}
+              className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
             >
               About Us
             </Link>
@@ -163,8 +177,6 @@ const About = React.memo(() => {
           </motion.h2>
         </motion.div>
       </section>
-
-   
 
       {/* Section 2: Our Story */}
       <section
@@ -233,8 +245,116 @@ const About = React.memo(() => {
         </motion.div>
       </section>
 
-         {/* Section 5: Construction and Development */}
-         <section
+      {/* Section 3: Subsidiaries */}
+      <section
+        className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white relative z-10"
+        ref={(el) => (sectionRefs.current.section3 = el)}
+        data-section="section3"
+      >
+        <motion.div
+          className="flex flex-col mx-auto max-w-full sm:max-w-11/12 md:max-w-10/12"
+          initial="hidden"
+          animate={visibleSections.section3 ? "visible" : "hidden"}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.5,
+              },
+            },
+          }}
+        >
+          <motion.h2
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-6"
+            variants={{
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0 },
+            }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            Subsidiaries
+          </motion.h2>
+          <div className="flex flex-col md:flex-row justify-center items-start space-y-8 md:space-y-0 md:space-x-12">
+            <motion.div
+              className="md:w-1/2 pr-4"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed galaxy-fold:text-balanced tracking-normal mb-6">
+                The holding daughter company "Imeri" is the first producer of
+                Georgian cigars. 29 sorts of cigars and cigarillas are produced
+                from tobacco leaves grown in Adjara, Keda.
+              </p>
+            </motion.div>
+            <motion.div
+              className="md:w-1/2"
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
+                The outstanding brand of the company is "Adjara Wine House", a
+                chateau-type restaurant, which includes a winery, enotheque,
+                ethnographic museum, cellar, and a restaurant. Here, in the
+                beautiful nature, by the river, you will get acquainted with the
+                ancient Georgian traditions, taste the most delicious wine and
+                Georgian dishes.
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Section 4: Company Vision */}
+      <section
+        className="min-h-[50vh] px-4 sm:px-6 mt-0 md:px-16 lg:py-20 bg-white relative z-10"
+        ref={(el) => (sectionRefs.current.section4 = el)}
+        data-section="section4"
+      >
+        <motion.div
+          className="flex flex-col mx-auto max-w-full sm:max-w-11/12 md:max-w-10/12"
+          initial="hidden"
+          animate={visibleSections.section4 ? "visible" : "hidden"}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.5,
+              },
+            },
+          }}
+        >
+          <motion.h2
+            className="text-3xl sm:text-4xl lg:mt-0 md:text-5xl font-semibold text-left mb-6"
+            variants={{
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0 },
+            }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            Company Vision and Goals
+          </motion.h2>
+          <motion.p
+            className="text-base sm:w-full lg:w-1/2 sm:text-lg md:text-xl text-left leading-relaxed tracking-normal mb-8"
+            variants={{
+              hidden: { opacity: 0, y: 50 },
+              visible: { opacity: 1, y: 0 },
+            }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            Mardi Holding is led by a young, creative and professional team,
+            which aims to offer customers a big variety of quality products.
+            Our starting point is the protection of the environment and the
+            economic development of the region.
+          </motion.p>
+        </motion.div>
+      </section>
+
+      {/* Section 5: Construction and Development */}
+      <section
         className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white relative z-10"
         ref={(el) => (sectionRefs.current.section5 = el)}
         data-section="section5"
@@ -277,114 +397,8 @@ const About = React.memo(() => {
           </motion.p>
         </motion.div>
       </section>
-
-      {/* Section 3: Parallax Background */}
-      <section
-        className="min-h-[40vh] px-4 sm:px-6 lg:mt-0 md:px-16 bg-white relative z-10"
-        ref={(el) => (sectionRefs.current.section3 = el)}
-        data-section="section3"
-      >
-        <motion.div
-          className="flex flex-col max-w-full sm:max-w-11/12 md:max-w-10/12"
-          initial="hidden"
-          animate={visibleSections.section3 ? "visible" : "hidden"}
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.5,
-              },
-            },
-          }}
-        >
-          <div className="flex flex-col items-start space-y-12">
-            <motion.div
-              className="w-full h-[85vh] mt-[-5vh] sm:mt-[-10vh] flex justify-start items-center relative text-white bg-cover bg-no-repeat bg-center z-10"
-              style={{
-                backgroundImage: "url('/images/cigarr.jpeg')",
-                backgroundPosition: "center",
-                transform: `translate3d(0, ${lerpedScrollY * 0.2}px, 0)`, // Parallax effect
-                backgroundSize: "cover",
-                willChange: lerpedScrollY > 0 ? "transform" : "auto",
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
-              <p className="relative z-10 text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left p-10 leading-relaxed tracking-normal">
-                The holding daughter company "Imeri" is the first producer of
-                Georgian cigars. 29 sorts of cigars and cigarillas are produced
-                from tobacco leaves grown in Adjara, Keda.
-              </p>
-            </motion.div>
-
-            <motion.div
-              className="w-full h-[100vh] p-10 flex justify-end items-center relative text-white bg-cover bg-no-repeat bg-center"
-              style={{
-                backgroundImage: "url('/images/wine.webp')",
-                backgroundPosition: "center",
-                transform: `translate3d(0, ${lerpedScrollY * 0.2}px, 0)`, // Parallax effect
-                backgroundSize: "cover",
-                willChange: lerpedScrollY > 0 ? "transform" : "auto",
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-90"></div>
-              <p className="relative z-10 text-base sm:text-lg md:text-xl w-full sm:w-2/3 text-left leading-relaxed tracking-normal">
-                The outstanding brand of the company is "Adjara Wine House", a
-                chateau-type restaurant, which includes a winery, enotheque,
-                ethnographic museum, cellar, and a restaurant. Here, in the
-                beautiful nature, by the river, you will get acquainted with the
-                ancient Georgian traditions, taste the most delicious wine and
-                Georgian dishes.
-              </p>
-            </motion.div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Section 4: Company Vision */}
-      <section
-        className="min-h-[50vh] px-4 sm:px-6 mt-[70vh] sm:mt-[50vh]  md:px-16 lg:py-20 bg-white relative z-10"
-        ref={(el) => (sectionRefs.current.section4 = el)}
-        data-section="section4"
-      >
-        <motion.div
-          className="flex flex-col mx-auto max-w-full sm:max-w-11/12 md:max-w-10/12"
-          initial="hidden"
-          animate={visibleSections.section4 ? "visible" : "hidden"}
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.5,
-              },
-            },
-          }}
-        >
-          <motion.h2
-            className="text-3xl sm:text-4xl lg:mt-0 mt-10 md:text-5xl font-semibold text-left mb-6"
-            variants={{
-              hidden: { opacity: 0, x: -50 },
-              visible: { opacity: 1, x: 0 },
-            }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            Company Vision and Goals
-          </motion.h2>
-          <motion.p
-            className="text-base sm:w-full lg:w-1/2 sm:text-lg md:text-xl text-left leading-relaxed tracking-normal mb-[15vh]"
-            variants={{
-              hidden: { opacity: 0, y: 50 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            Mardi Holding is led by a young, creative and professional team,
-            which aims to offer customers a big variety of quality products.
-            Our starting point is the protection of the environment and the
-            economic development of the region.
-          </motion.p>
-        </motion.div>
-      </section>
     </main>
   );
 });
 
 export default About;
-

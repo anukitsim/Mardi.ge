@@ -1,5 +1,3 @@
-// app/page.jsx
-
 "use client";
 
 import { useRef, useState, useEffect, useCallback, memo } from "react";
@@ -62,7 +60,19 @@ export default function Home() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [introComplete, setIntroComplete] = useState(false);
 
+  useEffect(() => {
+    // Check if intro has been completed before in this session
+    const hasSeenIntro = sessionStorage.getItem('introComplete');
+    if (hasSeenIntro) {
+      setIntroComplete(true); // Skip the intro if already shown
+    }
+  }, []);
 
+  // Handle intro end
+  const handleIntroEnd = () => {
+    setIntroComplete(true);
+    sessionStorage.setItem('introComplete', 'true'); // Store intro completion in session storage
+  };
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {
@@ -80,11 +90,6 @@ export default function Home() {
   // Reference to the VideoPlayer component
   const videoPlayerRef = useRef(null);
 
-  // Handle intro end
-  const handleIntroEnd = () => {
-    setIntroComplete(true);
-  };
-
   // Preload the next video segments
   const preloadNextVideo = useCallback(
     (index) => {
@@ -98,7 +103,6 @@ export default function Home() {
   // Switch to the next video every 10 seconds
   const handleNextVideo = useCallback(() => {
     const nextIndex = (currentVideoIndex + 1) % videoSources.length;
-
 
     // Preload the next video's segments
     preloadNextVideo(nextIndex);

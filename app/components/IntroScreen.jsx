@@ -19,7 +19,7 @@ export default function IntroScreen({ onIntroEnd }) {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsIntroComplete(true);
-    }, 3000); // Intro lasts for 3 seconds
+    }, 5000); // Intro lasts for 3 seconds
     return () => clearTimeout(timeout);
   }, []);
 

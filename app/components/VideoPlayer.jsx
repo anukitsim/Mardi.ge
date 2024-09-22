@@ -2,8 +2,10 @@
 
 "use client";
 
-import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import Hls from "hls.js";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
 const VideoPlayer = forwardRef(
   (
@@ -21,7 +23,8 @@ const VideoPlayer = forwardRef(
   ) => {
     const videoRef = useRef(null);
     const hlsInstance = useRef(null);
-    const hlsPreloaderRef = useRef(null); // Store preloader instance
+    const hlsPreloaderRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(true); // Add loading state
 
     // Expose methods to parent component
     useImperativeHandle(ref, () => ({
@@ -38,12 +41,12 @@ const VideoPlayer = forwardRef(
             autoStartLoad: true, // Start loading immediately
             enableWorker: true,
             lowLatencyMode: false,
-            maxBufferLength: 60, // Adjust as needed
-            maxMaxBufferLength: 120,
+            maxBufferLength: 120, // Adjust as needed
+            maxMaxBufferLength: 240,
             pLoader: function (config) {
               const loader = new Hls.DefaultConfig.loader(config);
               this.load = (context, config, callbacks) => {
-                context.url = context.url.replace(/(\?|&)rnd=\d+/, '');
+                context.url = context.url.replace(/(\?|&)rnd=\d+/, "");
                 loader.load(context, config, callbacks);
               };
               this.abort = () => {
@@ -70,6 +73,8 @@ const VideoPlayer = forwardRef(
     }));
 
     useEffect(() => {
+      setIsLoading(true); // Start loading
+
       if (videoRef.current) {
         if (hlsInstance.current) {
           hlsInstance.current.destroy();
@@ -86,7 +91,7 @@ const VideoPlayer = forwardRef(
             pLoader: function (config) {
               const loader = new Hls.DefaultConfig.loader(config);
               this.load = (context, config, callbacks) => {
-                context.url = context.url.replace(/(\?|&)rnd=\d+/, '');
+                context.url = context.url.replace(/(\?|&)rnd=\d+/, "");
                 loader.load(context, config, callbacks);
               };
               this.abort = () => {
@@ -104,8 +109,12 @@ const VideoPlayer = forwardRef(
           hlsInstance.current.on(Hls.Events.MANIFEST_PARSED, () => {
             videoRef.current
               .play()
+              .then(() => {
+                setIsLoading(false); // Video is ready
+              })
               .catch((error) => {
                 console.warn("Auto-play prevented: ", error);
+                setIsLoading(false); // Consider video ready even if autoplay is prevented
               });
           });
 
@@ -118,8 +127,12 @@ const VideoPlayer = forwardRef(
           videoRef.current.addEventListener("loadedmetadata", () => {
             videoRef.current
               .play()
+              .then(() => {
+                setIsLoading(false); // Video is ready
+              })
               .catch((error) => {
                 console.warn("Auto-play prevented: ", error);
+                setIsLoading(false);
               });
           });
         }
@@ -144,17 +157,40 @@ const VideoPlayer = forwardRef(
     }, [sources.hls]);
 
     return (
-      <video
-        ref={videoRef}
-        className={className}
-        autoPlay={autoPlay}
-        muted={muted}
-        loop={loop}
-        preload={preload}
-        style={style}
-      >
-        Your browser does not support the video tag.
-      </video>
+      <div className={className} style={style}>
+        {isLoading && (
+          <div className="loading-background absolute top-0 left-0 w-full h-full z-10">
+            {/* Background gradient similar to intro */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-900 to-black"></div>
+            {/* Logo */}
+            <motion.div
+              initial={{ scale: 1 }}
+              animate={{ scale: [1, 1.1, 1] }}
+              transition={{
+                duration: 1,
+                ease: "easeInOut",
+                repeat: Infinity,
+              }}
+              className="flex items-center justify-center h-full"
+            >
+              <Image src="/images/logo.svg" alt="Logo" width={70} height={20} />
+            </motion.div>
+          </div>
+        )}
+        <video
+          ref={videoRef}
+          className={`absolute top-0 left-0 w-full h-full object-cover ${
+            isLoading ? "opacity-0" : "opacity-100"
+          }`}
+          autoPlay={autoPlay}
+          muted={muted}
+          loop={loop}
+          preload={preload}
+          style={style}
+        >
+          Your browser does not support the video tag.
+        </video>
+      </div>
     );
   }
 );

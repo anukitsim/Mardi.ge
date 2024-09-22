@@ -27,13 +27,14 @@
 }
 
 body {
-  font-family: var(--font-family-primary);
-  color: #303030; /* Default body color */
+  font-family: "Montserrat", sans-serif; /* Choose one font-family */
+  color: #FFFFFF; /* Adjusted for better contrast against dark background */
   font-size: var(--font-size-body);
   line-height: var(--line-height-normal);
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  background: linear-gradient(to bottom right, #2D3748, #1A202C, #000000); /* Equivalent to Tailwind gradient */
 }
 
 html {
@@ -49,11 +50,8 @@ html {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-    to bottom,
-    rgba(var(--background-start-rgb), 1),
-    rgba(var(--background-end-rgb), 1)
-  );
+ 
+  background: linear-gradient(to bottom right, #1a1a1a, #000000);
   font-family: "Montserrat", sans-serif;
 }
 
