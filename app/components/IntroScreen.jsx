@@ -1,3 +1,5 @@
+// components/IntroScreen.jsx
+
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -13,11 +15,11 @@ export default function IntroScreen({ onIntroEnd }) {
     }
   }, [isIntroComplete, onIntroEnd]);
 
-  // Increase the intro duration to 8 seconds
+  // Set the intro duration to 3 seconds
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsIntroComplete(true);
-    }, 8000); // Adjust the duration as needed
+    }, 3000); // Intro lasts for 3 seconds
     return () => clearTimeout(timeout);
   }, []);
 
@@ -31,13 +33,13 @@ export default function IntroScreen({ onIntroEnd }) {
         initial={{ scale: 1 }}
         animate={{ scale: [1, 1.1, 1] }}
         transition={{
-          duration: 2, // Increase the animation duration
+          duration: 1, // Time for one bounce cycle
           ease: "easeInOut",
-          repeat: Infinity,
+          repeat: Infinity, // Repeat the bounce indefinitely
         }}
         className="relative z-10"
       >
-        <Image src="/images/logo.svg" alt="Logo" width={70} height={20} />
+        <Image src="/images/logo.svg" alt="Logo" width={70} height={20} /> {/* Small Logo */}
       </motion.div>
     </div>
   );

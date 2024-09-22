@@ -1,4 +1,6 @@
-"use client"
+// components/VideoPlayer.jsx
+
+"use client";
 
 import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import Hls from "hls.js";
@@ -19,17 +21,25 @@ const VideoPlayer = forwardRef(
   ) => {
     const videoRef = useRef(null);
     const hlsInstance = useRef(null);
+    const hlsPreloaderRef = useRef(null); // Store preloader instance
 
     // Expose methods to parent component
     useImperativeHandle(ref, () => ({
       preloadNextVideo: (nextSource) => {
         if (Hls.isSupported() && nextSource) {
-          // Create a temporary HLS.js instance to preload segments
+          // Destroy any existing preloader
+          if (hlsPreloaderRef.current) {
+            hlsPreloaderRef.current.destroy();
+            hlsPreloaderRef.current = null;
+          }
+
+          // Create a new HLS.js instance for preloading
           const hlsPreloader = new Hls({
-            autoStartLoad: false,
+            autoStartLoad: true, // Start loading immediately
             enableWorker: true,
             lowLatencyMode: false,
-            // **Add this to prevent appending random query strings**
+            maxBufferLength: 60, // Adjust as needed
+            maxMaxBufferLength: 120,
             pLoader: function (config) {
               const loader = new Hls.DefaultConfig.loader(config);
               this.load = (context, config, callbacks) => {
@@ -47,20 +57,14 @@ const VideoPlayer = forwardRef(
 
           hlsPreloader.loadSource(nextSource);
 
-          hlsPreloader.on(Hls.Events.MANIFEST_PARSED, () => {
-            // Start loading segments
-            hlsPreloader.startLoad(0);
-          });
-
           hlsPreloader.on(Hls.Events.ERROR, (event, data) => {
             console.error("HLS.js preloader error:", data);
             hlsPreloader.destroy();
+            hlsPreloaderRef.current = null;
           });
 
-          // Destroy the preloader after some time to prevent resource leaks
-          setTimeout(() => {
-            hlsPreloader.destroy();
-          }, 10000); // Adjust the timeout as needed
+          // Store the preloader instance
+          hlsPreloaderRef.current = hlsPreloader;
         }
       },
     }));
@@ -77,7 +81,8 @@ const VideoPlayer = forwardRef(
             autoStartLoad: true,
             enableWorker: true,
             lowLatencyMode: false,
-            // **Add this to prevent appending random query strings**
+            maxBufferLength: 60,
+            maxMaxBufferLength: 120,
             pLoader: function (config) {
               const loader = new Hls.DefaultConfig.loader(config);
               this.load = (context, config, callbacks) => {
@@ -91,9 +96,6 @@ const VideoPlayer = forwardRef(
                 loader.destroy();
               };
             },
-            // Configure buffer settings
-            maxBufferLength: 60, // Increase buffer length to keep segments longer
-            maxMaxBufferLength: 120,
           });
 
           hlsInstance.current.loadSource(sources.hls);
@@ -132,6 +134,11 @@ const VideoPlayer = forwardRef(
           videoRef.current.pause();
           videoRef.current.removeAttribute("src");
           videoRef.current.load();
+        }
+        // Destroy the preloader when the component unmounts
+        if (hlsPreloaderRef.current) {
+          hlsPreloaderRef.current.destroy();
+          hlsPreloaderRef.current = null;
         }
       };
     }, [sources.hls]);

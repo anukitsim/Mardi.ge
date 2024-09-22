@@ -99,8 +99,9 @@ export default function Home() {
   const handleNextVideo = useCallback(() => {
     const nextIndex = (currentVideoIndex + 1) % videoSources.length;
 
+
     // Preload the next video's segments
-    preloadNextVideo((nextIndex + 1) % videoSources.length);
+    preloadNextVideo(nextIndex);
 
     // Transition to the next video
     setCurrentVideoIndex(nextIndex);
