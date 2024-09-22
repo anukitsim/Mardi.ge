@@ -202,3 +202,22 @@ body {
   z-index: 2000;
 }
 
+.button-contact {
+  background: linear-gradient(to right, #2d3748, #1a202c, #000);
+  padding: 16px 32px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease,
+    box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.button-contact:hover {
+  background: linear-gradient(to right, #4a5568, #2d3748, #1a202c);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 1);
+}

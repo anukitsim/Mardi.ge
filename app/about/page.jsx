@@ -111,7 +111,7 @@ const About = React.memo(() => {
             layout="fill"
             objectFit="cover"
             quality={75}
-            priority // Faster loading on this hero image
+            priority 
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80 z-20"></div>
@@ -309,9 +309,9 @@ const About = React.memo(() => {
         </motion.div>
       </section>
 
-      {/* Section 4: Company Vision */}
+      {/* Section 4: Construction & Development */}
       <section
-        className="min-h-[50vh] px-4 sm:px-6 mt-0 md:px-16 lg:py-20 bg-white relative z-10"
+        className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white relative z-10"
         ref={(el) => (sectionRefs.current.section4 = el)}
         data-section="section4"
       >
@@ -328,56 +328,12 @@ const About = React.memo(() => {
           }}
         >
           <motion.h2
-            className="text-3xl sm:text-4xl lg:mt-0 md:text-5xl font-semibold text-left mb-6"
-            variants={{
-              hidden: { opacity: 0, x: -50 },
-              visible: { opacity: 1, x: 0 },
-            }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            Company Vision and Goals
-          </motion.h2>
-          <motion.p
-            className="text-base sm:w-full lg:w-1/2 sm:text-lg md:text-xl text-left leading-relaxed tracking-normal mb-8"
-            variants={{
-              hidden: { opacity: 0, y: 50 },
-              visible: { opacity: 1, y: 0 },
-            }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            Mardi Holding is led by a young, creative and professional team,
-            which aims to offer customers a big variety of quality products.
-            Our starting point is the protection of the environment and the
-            economic development of the region.
-          </motion.p>
-        </motion.div>
-      </section>
-
-      {/* Section 5: Construction and Development */}
-      <section
-        className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white relative z-10"
-        ref={(el) => (sectionRefs.current.section5 = el)}
-        data-section="section5"
-      >
-        <motion.div
-          className="flex flex-col mx-auto max-w-10/12"
-          initial="hidden"
-          animate={visibleSections.section5 ? "visible" : "hidden"}
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.5,
-              },
-            },
-          }}
-        >
-          <motion.h2
             className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-6"
             variants={{
               hidden: { opacity: 0, x: -50 },
               visible: { opacity: 1, x: 0 },
             }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             Construction & Development
           </motion.h2>
@@ -396,6 +352,62 @@ const About = React.memo(() => {
             and completed hospitality complexes.
           </motion.p>
         </motion.div>
+      </section>
+
+      {/* Section 5: Company Vision and Goals (Last section on the right) */}
+      <section
+        className="min-h-[50vh] px-4 sm:px-6 md:px-16 py-20 bg-white relative z-10"
+        ref={(el) => (sectionRefs.current.section5 = el)}
+        data-section="section5"
+      >
+        <motion.div
+          className="flex flex-col lg:flex-row mx-auto max-w-full sm:max-w-11/12 md:max-w-10/12"
+          initial="hidden"
+          animate={visibleSections.section5 ? "visible" : "hidden"}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.5,
+              },
+            },
+          }}
+        >
+          {/* Company Vision (Right aligned) */}
+          <motion.div
+            className="lg:w-1/2 lg:ml-auto"
+            variants={{
+              hidden: { opacity: 0, x: 50 },
+              visible: { opacity: 1, x: 0 },
+            }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-6">
+              Company Vision and Goals
+            </h2>
+            <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal mb-6">
+              Mardi Holding is led by a young, creative and professional team,
+              which aims to offer customers a big variety of quality products.
+              Our starting point is the protection of the environment and the
+              economic development of the region.
+            </p>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Contact Us Button */}
+      <section className="w-full py-10 bg-white flex justify-end pr-[10vw]">
+        <motion.button
+          className="button-contact text-shadow"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Link href="/contact" passHref>
+            <span className="text-white tracking-normal leading-relaxed px-10 py-4 text-lg font-semi-bold">
+              Contact Us
+            </span>
+          </Link>
+        </motion.button>
       </section>
     </main>
   );

@@ -4,6 +4,8 @@ import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import NextImage from "next/image"; // Rename to avoid conflict with native Image()
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebook, faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
 const Contact = () => {
   // Preload the Hero Image
@@ -113,9 +115,6 @@ const Contact = () => {
         </motion.div>
       </section>
 
-
-     
-
       {/* Contact Form Section */}
       <section className="bg-gray-100 py-10 md:py-16 px-6 md:px-16">
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-start">
@@ -153,6 +152,47 @@ const Contact = () => {
             >
               Phone: +995 568 60 60 60
             </motion.p>
+
+            {/* Social Icons */}
+            <motion.div
+              className="flex space-x-6 mt-6"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut", delay: 1.6 }}
+            >
+              {/* Facebook */}
+              <motion.a
+                href="https://www.facebook.com/MardiHolding/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <FontAwesomeIcon icon={faFacebook} className="text-blue-900 text-2xl" />
+              </motion.a>
+
+              {/* LinkedIn */}
+              <motion.a
+                href="https://www.linkedin.com/company/mardi-holding/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <FontAwesomeIcon icon={faLinkedin} className="text-blue-900 text-2xl" />
+              </motion.a>
+
+              {/* Instagram */}
+              <motion.a
+                href="https://www.instagram.com/mardi_holding/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <FontAwesomeIcon icon={faInstagram} className="text-blue-900 text-2xl" />
+              </motion.a>
+            </motion.div>
           </div>
 
           {/* Right Column - Get in Touch */}
