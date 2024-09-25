@@ -173,7 +173,7 @@ export default function Home() {
               transition={{ duration: 1 }}
             >
               <DynamicVideoPlayer
-                ref={videoPlayerRef}
+                forwardRef={videoPlayerRef}
                 sources={videoSources[currentVideoIndex]}
                 className="absolute top-0 left-0 w-full h-full object-cover"
                 autoPlay
