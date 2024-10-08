@@ -73,6 +73,40 @@ const Contact = () => {
     []
   );
 
+  // Placeholder for API request
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const formData = {
+      fields: {
+        TITLE: "Contact Request",
+        NAME: e.target.name.value,
+        EMAIL: [{ VALUE: e.target.email.value, VALUE_TYPE: "WORK" }],
+        PHONE: [{ VALUE: e.target.phone.value, VALUE_TYPE: "WORK" }],
+        COMMENTS: e.target.message.value,
+      },
+    };
+  
+    console.log("Form Data to Send:", formData);
+  
+    try {
+      // Replace with real Webhook URL after testing
+      const response = await fetch("https://example.com/real-webhook-url", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const result = await response.json();
+      console.log("Response from Webhook:", result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
+
   return (
     <div className="contact-page">
       {/* Hero Section */}
@@ -81,7 +115,7 @@ const Contact = () => {
         style={{
           backgroundImage: "url('/images/contact.jpeg')",
           backgroundSize: "cover",
-          backgroundPosition: "center center",
+          backgroundPosition: "center center"
         }}
       >
         {MemoizedHeader}
@@ -210,20 +244,21 @@ const Contact = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1.2 }}
+              onSubmit={handleSubmit}
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div className="relative">
-                  <input type="text" className="custom-input" placeholder="Name" />
+                  <input type="text" name="name" className="custom-input" placeholder="Name" required />
                 </div>
                 <div className="relative">
-                  <input type="email" className="custom-input" placeholder="Email" />
+                  <input type="email" name="email" className="custom-input" placeholder="Email" required />
                 </div>
               </div>
               <div className="relative">
-                <input type="text" className="custom-input" placeholder="Mobile Number" />
+                <input type="text" name="phone" className="custom-input" placeholder="Mobile Number" required />
               </div>
               <div className="relative">
-                <textarea className="custom-input" rows="4" placeholder="Message"></textarea>
+                <textarea name="message" className="custom-input" rows="4" placeholder="Message" required></textarea>
               </div>
 
               <motion.button

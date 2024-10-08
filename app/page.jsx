@@ -20,7 +20,7 @@ export default function Home() {
 
   // Video sources
   const videoSources = [
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/7290c07cdc32831675675939eb4b361f/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/012ad024a53bbf6e0e55510c2f52e9ea/manifest/video.m3u8" },
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/6c43f158d1d61c502d9ae7a3a0a35b9c/manifest/video.m3u8" },
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/3be1d3e3558f023c4f9801d2c50c98a8/manifest/video.m3u8" },
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/8cc0d687b8c9dff9d480aa3b6b7a104a/manifest/video.m3u8" },
