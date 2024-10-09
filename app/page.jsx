@@ -21,30 +21,32 @@ export default function Home() {
   // Video sources
   const videoSources = [
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/012ad024a53bbf6e0e55510c2f52e9ea/manifest/video.m3u8" },
+    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/656f09909a1970c52a3b58af39a74593/manifest/video.m3u8" },
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/6c43f158d1d61c502d9ae7a3a0a35b9c/manifest/video.m3u8" },
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/3be1d3e3558f023c4f9801d2c50c98a8/manifest/video.m3u8" },
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/8cc0d687b8c9dff9d480aa3b6b7a104a/manifest/video.m3u8" },
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/796906c6cdcaab891fe4b4b6b8678dbb/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/656f09909a1970c52a3b58af39a74593/manifest/video.m3u8" },
+    
   ];
 
   // Titles, descriptions, and URLs
   const titles = [
     "Mardi Development",
+    "Mardi Comfort",
     "Mardi Food & Beverage",
     "Mardi Travel Lab",
     "Mardi Energy",
-    "Mardi Wine & Cigar",
-    "Mardi Comfort",
+    "Mardi Wine & Cigar", 
   ];
 
   const descriptions = [
     "Creating premium hotels in partnership with top international brands.",
+    "Aiming to be Georgia’s top hospitality management company.",
     "Discover Adjarian Wine House, home to the unique Chkhaveri grape.",
     "Explore the beauty of Georgia with Mardi Travel Lab.",
     "Cascade of hydropower plants on the Khokhniskali River, Keda.",
     "Producing Porto Franco wine and Georgian-grown tobacco.",
-    "Aiming to be Georgia’s top hospitality management company.",
+    
   ];
 
   const urls = [
@@ -235,13 +237,13 @@ export default function Home() {
                   exit="exit"
                 >
                   <motion.h1
-                    className="text-[5vw] sm:text-[2.5vw] uppercase font-regular mb-[2vw] leading-tight tracking-tight text-shadow-strong"
+                    className="text-[3vw] small-range:text-[30px] medium-range:text-[30px]  uppercase font-regular mb-[2vw] leading-tight tracking-tight text-shadow-strong"
                   >
                     {titles[currentVideoIndex]}
                   </motion.h1>
 
                   <motion.p
-                    className="description mt-[3vh] text-[4vw] sm:text-[1.2vw] max-w-[55vw] font-regular leading-normal tracking-wide text-shadow-strong"
+                    className="description mt-[3vh] small-range:text-[20px] medium-range:text-[30px] small-range:pt-5 text-[4vw] sm:text-[1.2vw] max-w-[55vw] font-regular leading-normal tracking-wide text-shadow-strong"
                   >
                     {descriptions[currentVideoIndex]}
                   </motion.p>
@@ -253,7 +255,7 @@ export default function Home() {
                     transition={{ duration: 0.3 }}
                   >
                     <Link href={urls[currentVideoIndex]} target="_blank" rel="noopener noreferrer">
-                      <span className="text-white tracking-normal whitespace-nowrap leading-relaxed px-[6vw] py-[2vh] text-[4vw] sm:text-[1.2vw] font-semi-bold">
+                      <span className="text-white medium-range:text-[20px] tracking-normal whitespace-nowrap leading-relaxed px-[6vw] py-[2vh] text-[4vw] sm:text-[1.2vw] font-semi-bold">
                         Visit Website
                       </span>
                     </Link>
@@ -274,7 +276,7 @@ export default function Home() {
               <motion.div
                 key={index}
                 data-index={index}
-                className={`relative inline-block w-[40vw] sm:w-[20vw] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${
+                className={`relative inline-block w-[40vw] sm:w-[20vw] medium-range:w-[40vw] medium-range:h-[15vh] h-[25vw] sm:h-[10vw] mx-auto overflow-hidden rounded-md transition-shadow duration-300 flex-shrink-0 ${
                   currentVideoIndex === index ? "shadow-lg" : ""
                 }`}
                 style={{

@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import NextImage from "next/image"; // Rename to avoid conflict with native Image()
+import NextImage from "next/image"; // Renamed to avoid conflict with native Image()
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
 const Contact = () => {
+  const [messageSent, setMessageSent] = useState(false); // State for confirmation message
+
   // Preload the Hero Image
   useEffect(() => {
     const img = new window.Image(); // Preload image for faster load
@@ -90,8 +92,8 @@ const Contact = () => {
     console.log("Form Data to Send:", formData);
   
     try {
-      // Replace with real Webhook URL after testing
-      const response = await fetch("https://example.com/real-webhook-url", {
+      // Replace with the real Webhook URL when received
+      const response = await fetch("https://eozk43ledub4t1s.m.pipedream.net", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,11 +103,14 @@ const Contact = () => {
   
       const result = await response.json();
       console.log("Response from Webhook:", result);
+      setMessageSent(true); // Show confirmation message on success
+
+      // Clear the form fields after success
+      e.target.reset();
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  
 
   return (
     <div className="contact-page">
@@ -270,6 +275,18 @@ const Contact = () => {
               >
                 <span>Send Message</span>
               </motion.button>
+
+              {/* Message sent confirmation */}
+              {messageSent && (
+                <motion.p
+                  className="text-[#0076DE] mt-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  Message Sent Successfully!
+                </motion.p>
+              )}
             </motion.form>
           </div>
         </div>

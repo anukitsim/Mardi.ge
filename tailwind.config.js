@@ -39,8 +39,14 @@ module.exports = {
       // Add custom screen here
       screens: {
         // Existing breakpoints are preserved
-        // Add the custom breakpoint
+        // Add the custom breakpoints
         'galaxy-fold': { 'raw': '(width: 768px) and (height: 946px)' },
+        
+        // Custom screen range from 300px to 600px
+        'small-range': { 'min': '300px', 'max': '600px' },
+        
+        // Custom screen range from 700px to 1300px
+        'medium-range': { 'min': '700px', 'max': '1300px' },
       },
     },
   },
