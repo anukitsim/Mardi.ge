@@ -49,11 +49,11 @@ export default function Home() {
 
   const urls = [
     "https://www.mardi.ge/",
+    "/Mardi-Comfort",
     "https://awh.ge/en",
     "https://travelab.ge/",
     "/Mardi-Energy",
     "https://cigar.ge/",
-    "/Mardi-Comfort",
   ];
 
   // State variables
