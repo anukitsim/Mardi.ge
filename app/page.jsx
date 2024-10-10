@@ -26,7 +26,6 @@ export default function Home() {
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/3be1d3e3558f023c4f9801d2c50c98a8/manifest/video.m3u8" },
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/8cc0d687b8c9dff9d480aa3b6b7a104a/manifest/video.m3u8" },
     { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/796906c6cdcaab891fe4b4b6b8678dbb/manifest/video.m3u8" },
-    
   ];
 
   // Titles, descriptions, and URLs
@@ -36,7 +35,7 @@ export default function Home() {
     "Mardi Food & Beverage",
     "Mardi Travel Lab",
     "Mardi Energy",
-    "Mardi Wine & Cigar", 
+    "Mardi Wine & Cigar",
   ];
 
   const descriptions = [
@@ -46,7 +45,6 @@ export default function Home() {
     "Explore the beauty of Georgia with Mardi Travel Lab.",
     "Cascade of hydropower plants on the Khokhniskali River, Keda.",
     "Producing Porto Franco wine and Georgian-grown tobacco.",
-    
   ];
 
   const urls = [
@@ -64,7 +62,7 @@ export default function Home() {
 
   useEffect(() => {
     // Check if intro has been completed before in this session
-    const hasSeenIntro = sessionStorage.getItem('introComplete');
+    const hasSeenIntro = sessionStorage.getItem("introComplete");
     if (hasSeenIntro) {
       setIntroComplete(true); // Skip the intro if already shown
     }
@@ -73,18 +71,18 @@ export default function Home() {
   // Handle intro end
   const handleIntroEnd = () => {
     setIntroComplete(true);
-    sessionStorage.setItem('introComplete', 'true'); // Store intro completion in session storage
+    sessionStorage.setItem("introComplete", "true"); // Store intro completion in session storage
   };
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    if ("serviceWorker" in navigator) {
       navigator.serviceWorker
-        .register('/service-worker.js', { scope: '/' })
+        .register("/service-worker.js", { scope: "/" })
         .then((registration) => {
-          console.log('Service Worker registered with scope:', registration.scope);
+          console.log("Service Worker registered with scope:", registration.scope);
         })
         .catch((error) => {
-          console.error('Service Worker registration failed:', error);
+          console.error("Service Worker registration failed:", error);
         });
     }
   }, []);
@@ -177,7 +175,7 @@ export default function Home() {
               <DynamicVideoPlayer
                 forwardRef={videoPlayerRef}
                 sources={videoSources[currentVideoIndex]}
-                className="absolute top-0 left-0 w-full h-full object-cover"
+                className="absolute top-0 left-0 w-full h-full object-cover lg:object-cover small-range:object-contain medium-range:object-contain"
                 autoPlay
                 muted
                 loop

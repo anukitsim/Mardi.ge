@@ -47,6 +47,8 @@ module.exports = {
         
         // Custom screen range from 700px to 1300px
         'medium-range': { 'min': '700px', 'max': '1300px' },
+
+        
       },
     },
   },
