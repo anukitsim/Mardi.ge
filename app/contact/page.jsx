@@ -93,7 +93,7 @@ const Contact = () => {
   
     try {
       // Replace with the real Webhook URL when received
-      const response = await fetch("https://crm.mardi.ge/rest/417/uab8sj7un53hr33b/", {
+      const response = await fetch("https://b24-u6ic1z.bitrix24.site/crm_form_sjobh/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
