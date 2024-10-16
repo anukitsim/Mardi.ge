@@ -88,28 +88,25 @@ const Contact = () => {
         COMMENTS: e.target.message.value,
       },
     };
-    
-    console.log("Form Data to Send:", formData);
-    
+  
     try {
-      const response = await fetch("https://hooks.zapier.com/hooks/catch/17249590/2tm872o/", { // Your Zapier webhook URL
-        method: "POST",
+      const response = await fetch('/api/submitForm', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-    
-      const result = await response.json();
-      console.log("Response from Zapier:", result);
-      setMessageSent(true); // Show confirmation message on success
   
-      // Clear the form fields after success
+      const result = await response.json();
+      console.log("Response from API:", result);
+      setMessageSent(true);
       e.target.reset();
     } catch (error) {
       console.error("Error:", error);
     }
   };
+  
   
   return (
     <div className="contact-page">
