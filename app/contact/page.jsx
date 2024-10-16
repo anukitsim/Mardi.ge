@@ -93,7 +93,7 @@ const Contact = () => {
   
     try {
       // Replace with the real Webhook URL when received
-      const response = await fetch("https://eozk43ledub4t1s.m.pipedream.net", {
+      const response = await fetch("https://crm.mardi.ge/rest/417/3ob83aoxa9qauf5n/crm.contact.add.json", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
