@@ -78,7 +78,7 @@ const Contact = () => {
   // Placeholder for API request
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    
     const formData = {
       fields: {
         TITLE: "Contact Request",
@@ -88,30 +88,29 @@ const Contact = () => {
         COMMENTS: e.target.message.value,
       },
     };
-  
+    
     console.log("Form Data to Send:", formData);
-  
+    
     try {
-      // Replace with the real Webhook URL when received
-      const response = await fetch("https://b24-u6ic1z.bitrix24.site/crm_form_sjobh/", {
+      const response = await fetch("https://hooks.zapier.com/hooks/catch/17249590/2tm872o/", { // Your Zapier webhook URL
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-  
+    
       const result = await response.json();
-      console.log("Response from Webhook:", result);
+      console.log("Response from Zapier:", result);
       setMessageSent(true); // Show confirmation message on success
-
+  
       // Clear the form fields after success
       e.target.reset();
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
+  
   return (
     <div className="contact-page">
       {/* Hero Section */}
