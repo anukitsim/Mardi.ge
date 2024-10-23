@@ -1,12 +1,23 @@
 export async function POST(req) {
   const data = await req.json();
-  // Perform actions with the data, such as forwarding it to Zapier
-  const response = await fetch('https://hooks.zapier.com/hooks/catch/17249590/2tm872o/', {
+  
+  // Construct the payload for Bitrix24
+  const payload = {
+    fields: {
+      NAME: data.fields.NAME,
+      EMAIL: [data.fields.EMAIL[0].VALUE],
+      PHONE: [data.fields.PHONE[0].VALUE],
+      COMMENTS: data.fields.COMMENTS,
+    },
+  };
+
+  // Send the data to Bitrix24 API
+  const response = await fetch('https://crm.mardi.ge/rest/417/6u2rx5o0e6owwfmm/crm.contact.add.json', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
   });
 
   const result = await response.json();
