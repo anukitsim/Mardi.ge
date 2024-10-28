@@ -20,12 +20,12 @@ export default function Home() {
 
   // Video sources
   const videoSources = [
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/012ad024a53bbf6e0e55510c2f52e9ea/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/656f09909a1970c52a3b58af39a74593/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/6c43f158d1d61c502d9ae7a3a0a35b9c/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/3be1d3e3558f023c4f9801d2c50c98a8/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/8cc0d687b8c9dff9d480aa3b6b7a104a/manifest/video.m3u8" },
-    { hls: "https://customer-s2m96v0a16zk0okb.cloudflarestream.com/796906c6cdcaab891fe4b4b6b8678dbb/manifest/video.m3u8" },
+    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/f4fb76f47db81b0cde3fd60a782a04f3/manifest/video.m3u8" },
+    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/52ad84cd5c8e4cb200b0c94bfd37390c/manifest/video.m3u8" },
+    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/c366b9ce080eb15b9c5dbde238764a9a/manifest/video.m3u8" },
+    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/e5803735e4285dd454257322851dbc58/manifest/video.m3u8" },
+    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/eb1719925f1afa6230661cf820fd1c9e/manifest/video.m3u8" },
+    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/1e8850b8998b898b87df99a7919f8143/manifest/video.m3u8" },
   ];
 
   // Titles, descriptions, and URLs
