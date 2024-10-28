@@ -1,16 +1,16 @@
+// app/contact/layout.js
+
 import '../globals.css'
-
-
 
 export const metadata = {
   title: "Contact",
   description: "Contact MARDI HOLDING",
 };
 
-export default function RootLayout({ children }) {
+export default function ContactLayout({ children }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <div className="contact-layout">
+      {children}
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import NextImage from "next/image"; // Renamed to avoid conflict with native Image()
@@ -8,8 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
 const Contact = () => {
-  const [messageSent, setMessageSent] = useState(false); // State for confirmation message
-
   // Preload the Hero Image
   useEffect(() => {
     const img = new window.Image(); // Preload image for faster load
@@ -75,39 +73,6 @@ const Contact = () => {
     []
   );
 
-  // Placeholder for API request
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    const formData = {
-      fields: {
-        TITLE: "Contact Request",
-        NAME: e.target.name.value,
-        EMAIL: [{ VALUE: e.target.email.value, VALUE_TYPE: "WORK" }],
-        PHONE: [{ VALUE: e.target.phone.value, VALUE_TYPE: "WORK" }],
-        COMMENTS: e.target.message.value,
-      },
-    };
-  
-    try {
-      const response = await fetch('/api/submitForm', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-  
-      const result = await response.json();
-      console.log("Response from API:", result);
-      setMessageSent(true);
-      e.target.reset();
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-  
-  
   return (
     <div className="contact-page">
       {/* Hero Section */}
@@ -116,7 +81,7 @@ const Contact = () => {
         style={{
           backgroundImage: "url('/images/contact.jpeg')",
           backgroundSize: "cover",
-          backgroundPosition: "center center"
+          backgroundPosition: "center center",
         }}
       >
         {MemoizedHeader}
@@ -151,12 +116,12 @@ const Contact = () => {
       </section>
 
       {/* Contact Form Section */}
-      <section className="bg-gray-100 py-10 md:py-16 px-6 md:px-16">
+      <section className="bg-white py-10 md:py-16 px-6 md:px-16">
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-start">
           {/* Left Column - Head Office */}
           <div className="w-full mt-20 md:w-1/2 mb-10 md:mb-0">
             <motion.h2
-              className="text-2xl md:text-3xl  text-[#333333] font-bold mb-4"
+              className="text-2xl md:text-3xl text-[#333333] font-bold mb-4"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.8 }}
@@ -230,7 +195,7 @@ const Contact = () => {
             </motion.div>
           </div>
 
-          {/* Right Column - Get in Touch */}
+          {/* Right Column - Bitrix24 Embedded Form */}
           <div className="w-full mt-20 md:w-1/2">
             <motion.h2
               className="text-2xl md:text-3xl text-[#333333] font-bold mb-4"
@@ -240,113 +205,42 @@ const Contact = () => {
             >
               Get in Touch
             </motion.h2>
-            <motion.form
-              className="space-y-4 md:space-y-6 custom-form"
+            <motion.div
+              className="bitrix24-form-container"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1.2 }}
-              onSubmit={handleSubmit}
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                <div className="relative">
-                  <input type="text" name="name" className="custom-input" placeholder="Name" required />
-                </div>
-                <div className="relative">
-                  <input type="email" name="email" className="custom-input" placeholder="Email" required />
-                </div>
-              </div>
-              <div className="relative">
-                <input type="text" name="phone" className="custom-input" placeholder="Mobile Number" required />
-              </div>
-              <div className="relative">
-                <textarea name="message" className="custom-input" rows="4" placeholder="Message" required></textarea>
-              </div>
-
-              <motion.button
-                type="submit"
-                className="button-assist-form border text-[#88888] border-[#808080] p-1.5 rounded"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ duration: 0.3 }}
-              >
-                <span>Send Message</span>
-              </motion.button>
-
-              {/* Message sent confirmation */}
-              {messageSent && (
-                <motion.p
-                  className="text-[#0076DE] mt-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  Message Sent Successfully!
-                </motion.p>
-              )}
-            </motion.form>
+              <iframe
+                src="https://b24-u6ic1z.bitrix24.site/crm_form_sjobh/?lang=en" 
+                width="100%"
+                height="600px"
+                className="overflow-hidden bg-black"
+                title="Bitrix24 Contact Form"
+                style={{ border: "none" }}
+              ></iframe>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Custom Styles */}
       <style jsx>{`
-        .custom-input {
-          border: none;
-          border-bottom: 1px solid #333333;
+        .bitrix24-form-container {
           width: 100%;
-          padding: 8px 0;
-          background: transparent;
-          outline: none;
+          height: 600px;
+          /* Remove any background or additional styling */
+          background: none;
+          /* Optional: add border-radius or shadow if desired */
+          /* border-radius: 8px; */
+          /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
         }
 
-        .custom-input::placeholder {
-          color: #808080;
-        }
-
-        .button-assist-form {
-          display: inline-flex;
-          padding: 0.75rem 2rem;
-          font-size: 1rem;
-          text-transform: uppercase;
-          border-radius: 0.5rem;
-          border: 1px solid #333333;
-          color: #333333;
-          background-color: transparent;
-          cursor: pointer;
-          transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
-          position: relative;
-          margin-top: 1.5rem;
-        }
-
-        .button-assist-form::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 100%;
-          background: rgba(51, 51, 51, 0.2);
-          transition: left 0.5s ease-in-out;
-          z-index: 1;
-        }
-
-        .button-assist-form:hover::before {
-          left: 0;
-        }
-
-        .button-assist-form:hover {
-          background: linear-gradient(to right, rgba(51, 51, 51, 0.2), rgba(51, 51, 51, 0.1));
-          color: #ffffff;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2), 0 0 10px rgba(51, 51, 51, 0.6);
-          border-color: #333333;
-        }
-
-        .button-assist-form span {
-          position: relative;
-          z-index: 2;
+        /* Optional: Ensure the iframe fills the container */
+        .bitrix24-form-container iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
         }
       `}</style>
     </div>
