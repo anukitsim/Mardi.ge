@@ -7,7 +7,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import IntroScreen from "./components/IntroScreen";
 
-// Memoize the DynamicVideoPlayer to prevent unnecessary re-renders
+// Memoize DynamicVideoPlayer to prevent unnecessary re-renders
 const DynamicVideoPlayer = memo(
   dynamic(() => import("./components/VideoPlayer"), {
     ssr: false,
@@ -17,18 +17,31 @@ const DynamicVideoPlayer = memo(
 
 export default function Home() {
   const containerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Video sources
-  const videoSources = [
-    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/f4fb76f47db81b0cde3fd60a782a04f3/manifest/video.m3u8" },
-    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/52ad84cd5c8e4cb200b0c94bfd37390c/manifest/video.m3u8" },
-    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/c366b9ce080eb15b9c5dbde238764a9a/manifest/video.m3u8" },
-    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/e5803735e4285dd454257322851dbc58/manifest/video.m3u8" },
-    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/eb1719925f1afa6230661cf820fd1c9e/manifest/video.m3u8" },
-    { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/1e8850b8998b898b87df99a7919f8143/manifest/video.m3u8" },
-  ];
+  // Media query check for mobile screen
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  // Titles, descriptions, and URLs
+  // Mobile-specific video sources (first two only), full list for desktop
+  const videoSources = isMobile
+    ? [
+        { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/cc730046c9c161b5f4de30f8177cf56b/manifest/video.m3u8" },
+        { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/768b5125af7c11692fa615543d9c1bd1/manifest/video.m3u8" },
+      ]
+    : [
+        { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/f4fb76f47db81b0cde3fd60a782a04f3/manifest/video.m3u8" },
+        { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/52ad84cd5c8e4cb200b0c94bfd37390c/manifest/video.m3u8" },
+        { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/c366b9ce080eb15b9c5dbde238764a9a/manifest/video.m3u8" },
+        { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/e5803735e4285dd454257322851dbc58/manifest/video.m3u8" },
+        { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/eb1719925f1afa6230661cf820fd1c9e/manifest/video.m3u8" },
+        { hls: "https://customer-hvour7z20hdwmt52.cloudflarestream.com/1e8850b8998b898b87df99a7919f8143/manifest/video.m3u8" },
+      ];
+
   const titles = [
     "Mardi Development",
     "Mardi Comfort",
@@ -56,38 +69,21 @@ export default function Home() {
     "https://cigar.ge/",
   ];
 
-  // State variables
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [introComplete, setIntroComplete] = useState(false);
 
   useEffect(() => {
-    // Check if intro has been completed before in this session
     const hasSeenIntro = sessionStorage.getItem("introComplete");
     if (hasSeenIntro) {
-      setIntroComplete(true); // Skip the intro if already shown
+      setIntroComplete(true);
     }
   }, []);
 
-  // Handle intro end
   const handleIntroEnd = () => {
     setIntroComplete(true);
-    sessionStorage.setItem("introComplete", "true"); // Store intro completion in session storage
+    sessionStorage.setItem("introComplete", "true");
   };
 
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/service-worker.js", { scope: "/" })
-        .then((registration) => {
-          console.log("Service Worker registered with scope:", registration.scope);
-        })
-        .catch((error) => {
-          console.error("Service Worker registration failed:", error);
-        });
-    }
-  }, []);
-
-  // Reference to the VideoPlayer component
   const videoPlayerRef = useRef(null);
 
   // Preload the next video segments
@@ -100,17 +96,11 @@ export default function Home() {
     [videoSources]
   );
 
-  // Switch to the next video every 10 seconds
   const handleNextVideo = useCallback(() => {
     const nextIndex = (currentVideoIndex + 1) % videoSources.length;
-
-    // Preload the next video's segments
     preloadNextVideo(nextIndex);
-
-    // Transition to the next video
     setCurrentVideoIndex(nextIndex);
 
-    // Scroll thumbnail into view
     const container = containerRef.current;
     if (container && container.children[nextIndex]) {
       const thumbnail = container.children[nextIndex];
@@ -123,27 +113,20 @@ export default function Home() {
   }, [currentVideoIndex, videoSources.length, preloadNextVideo]);
 
   useEffect(() => {
-    // Preload the next video when the component mounts
     preloadNextVideo((currentVideoIndex + 1) % videoSources.length);
-
     const interval = setInterval(() => {
       handleNextVideo();
-    }, 10000); // Switch videos every 10 seconds
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [handleNextVideo, preloadNextVideo, currentVideoIndex]);
 
-  // Handle thumbnail click to switch videos manually
   const handleClick = useCallback(
     (index) => {
       if (index !== currentVideoIndex) {
-        // Preload the next video's segments
         preloadNextVideo((index + 1) % videoSources.length);
-
-        // Transition to the selected video
         setCurrentVideoIndex(index);
 
-        // Scroll thumbnail into view
         const container = containerRef.current;
         const clickedThumbnail = container.children[index];
         clickedThumbnail.scrollIntoView({
@@ -158,10 +141,8 @@ export default function Home() {
 
   return (
     <main className="relative w-full min-h-screen h-screen overflow-hidden font-primary">
-      {/* Intro screen */}
       {!introComplete && <IntroScreen onIntroEnd={handleIntroEnd} />}
 
-      {/* Video component */}
       <div className="main-content absolute inset-0">
         <div className="relative w-full h-full min-h-[100vh] flex flex-col justify-center items-center">
           <AnimatePresence initial={false}>
@@ -235,7 +216,7 @@ export default function Home() {
                   exit="exit"
                 >
                   <motion.h1
-                    className="text-[3vw] small-range:text-[30px] medium-range:text-[30px]  uppercase font-regular mb-[2vw] leading-tight tracking-tight text-shadow-strong"
+                    className="text-[3vw] small-range:text-[30px] medium-range:text-[30px] uppercase font-regular mb-[2vw] leading-tight tracking-tight text-shadow-strong"
                   >
                     {titles[currentVideoIndex]}
                   </motion.h1>
