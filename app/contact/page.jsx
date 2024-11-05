@@ -197,14 +197,17 @@ const Contact = () => {
 
           {/* Right Column - Bitrix24 Embedded Form */}
           <div className="w-full mt-20 md:w-1/2">
+            <div className="w-8/12 mx-auto">
             <motion.h2
-              className="text-2xl md:text-3xl text-[#333333] font-bold mb-4"
+              className="text-2xl md:text-3xl text-[#333333] font-bold  mb-4"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1 }}
             >
               Get in Touch
             </motion.h2>
+            </div>
+           
             <motion.div
               className="bitrix24-form-container"
               initial={{ opacity: 0, y: 50 }}
