@@ -834,31 +834,46 @@ const ChatBotUI = () => {
   }, [knowledgeBase]);
 
   const handleQuestionClick = useCallback(async (question) => {
+    // Display the user's question in the chat
     setMessages((prev) => [...prev, { type: "user", content: question.question }]);
+    
+    // Show bot is "typing"
     setIsBotTyping(true);
-
+  
+    // Check if a predefined answer exists
+    if (question.answer) {
+      // Use predefined answer directly
+      setTimeout(() => {
+        setMessages((prev) => [...prev, { type: "bot", content: question.answer }]);
+        setIsBotTyping(false);
+      }, 1000); // Simulate typing delay
+      return; // Skip API/Pinecone fallback
+    }
+  
+    // Fallback to API/Pinecone if no predefined answer exists
     try {
       const response = await fetch("/api/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: question.question }),
       });
-
+  
       if (!response.ok) throw new Error("Failed to fetch response from chatbot API");
-
+  
       const data = await response.json();
       const reply = data.reply || "I’m not sure how to answer that.";
-      setIsBotTyping(false);
       setMessages((prev) => [...prev, { type: "bot", content: reply }]);
     } catch (error) {
       console.error("Error fetching response:", error);
-      setIsBotTyping(false);
       setMessages((prev) => [
         ...prev,
         { type: "bot", content: "There was an error. Please try again." },
       ]);
+    } finally {
+      setIsBotTyping(false);
     }
   }, []);
+  
 
   const frontendCache = new Map();
 
