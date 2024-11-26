@@ -352,13 +352,7 @@ const PageBackground = styled.div`
   position: relative;
   min-height: 100vh;
   width: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(40, 44, 52, 0.9),
-    rgba(50, 55, 65, 0.9)
-  );
-  backdrop-filter: blur(8px);
-  animation: ${fadeIn} 0.5s ease-in-out;
+  background: #051e3d; /* Brand color applied */
   font-family: "Vela Sans", sans-serif;
   display: flex;
   flex-direction: column;
@@ -370,6 +364,8 @@ const PageBackground = styled.div`
   }
 `;
 
+
+
 const ChatBotContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -379,7 +375,7 @@ const ChatBotContainer = styled.div`
   margin-top: 6rem;
   border: 1px solid rgba(200, 200, 200, 0.2);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-  background: rgba(40, 44, 52, 0.8);
+  background: #051e3d; /* Brand color applied */
   height: 80vh; /* Fixed height for the chat container */
   max-height: 80vh; /* Prevents overflow */
   overflow: hidden; /* Hides any content overflow */
@@ -651,7 +647,7 @@ const LoaderWrapper = styled(motion.div)`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #282c34; /* Match the desired background color */
+  background-color: #051e3d; /* Match the desired background color */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -834,46 +830,31 @@ const ChatBotUI = () => {
   }, [knowledgeBase]);
 
   const handleQuestionClick = useCallback(async (question) => {
-    // Display the user's question in the chat
     setMessages((prev) => [...prev, { type: "user", content: question.question }]);
-    
-    // Show bot is "typing"
     setIsBotTyping(true);
-  
-    // Check if a predefined answer exists
-    if (question.answer) {
-      // Use predefined answer directly
-      setTimeout(() => {
-        setMessages((prev) => [...prev, { type: "bot", content: question.answer }]);
-        setIsBotTyping(false);
-      }, 1000); // Simulate typing delay
-      return; // Skip API/Pinecone fallback
-    }
-  
-    // Fallback to API/Pinecone if no predefined answer exists
+
     try {
       const response = await fetch("/api/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: question.question }),
       });
-  
+
       if (!response.ok) throw new Error("Failed to fetch response from chatbot API");
-  
+
       const data = await response.json();
       const reply = data.reply || "I’m not sure how to answer that.";
+      setIsBotTyping(false);
       setMessages((prev) => [...prev, { type: "bot", content: reply }]);
     } catch (error) {
       console.error("Error fetching response:", error);
+      setIsBotTyping(false);
       setMessages((prev) => [
         ...prev,
         { type: "bot", content: "There was an error. Please try again." },
       ]);
-    } finally {
-      setIsBotTyping(false);
     }
   }, []);
-  
 
   const frontendCache = new Map();
 
@@ -938,10 +919,10 @@ const ChatBotUI = () => {
         <PageBackground>
           <Header />
           <ChatBotContainer>
-  <div className="absolute lg:top-40 lg:right-12 top-18 right-4 flex items-center">
+  <div className="absolute lg:top-40  lg:right-12 top-18 right-4 flex items-center">
     <FiGlobe size={20} className="text-white mr-2" />
     <select
-      className="bg-gray-700 text-white px-2 py-1 rounded-md"
+      className="bg-[#051e3d] text-white px-2 py-1 rounded-md"
       value={language}
       onChange={(e) => handleLanguageChange(e.target.value)}
     >
