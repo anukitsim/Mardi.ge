@@ -26,12 +26,12 @@ export default function Header() {
       >
         About Us
       </Link>
-      {/* <Link
+      <Link
         href="/Chat"
         className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all hover:after:w-full"
       >
         Chat with us
-      </Link> */}
+      </Link>
     </nav>
   </header>
   );
