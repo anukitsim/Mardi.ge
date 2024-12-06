@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import Header from '../components/Header.jsx'
 
 // Linear interpolation function for smoother scrolling
 const lerp = (start, end, factor) => start + (end - start) * factor;
@@ -116,32 +117,7 @@ const About = React.memo(() => {
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80 z-20"></div>
 
-        <header className="absolute top-0 left-0 w-full flex items-center justify-between px-4 sm:px-6 md:px-16 py-4 sm:py-5 md:py-6 shadow-md z-30 font-medium text-white">
-          <Link href="/">
-            <Image
-              src="/images/logo.svg"
-              alt="Logo"
-              width={100}
-              height={30}
-              className="h-6 sm:h-7 md:h-8"
-              priority={false} // Defer loading for less critical images
-            />
-          </Link>
-          <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
-            <Link
-              href="/contact"
-              className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Contact
-            </Link>
-            <Link
-              href="/about"
-              className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
-            >
-              About Us
-            </Link>
-          </nav>
-        </header>
+      <Header />
 
         <motion.div
           className="absolute inset-0 z-20 flex flex-col justify-center px-4 sm:px-6 md:px-16"
@@ -215,7 +191,7 @@ const About = React.memo(() => {
               }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed galaxy-fold:text-balanced tracking-normal mb-6">
+              <p className="text-base font-primary sm:text-lg md:text-xl text-left leading-relaxed galaxy-fold:text-balanced tracking-normal mb-6">
                 Mardi Holding is a construction and development company that
                 unifies construction, architectural, tourism, transportation and
                 real estate companies, wine and cigar factories, as well as
@@ -232,7 +208,7 @@ const About = React.memo(() => {
               }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
+              <p className="text-base sm:text-lg font-primary md:text-xl text-left leading-relaxed tracking-normal">
                 Mardi offered healthy and delicious pastry to Batumi students
                 for an affordable price. Years later, this success became the
                 basis for a bigger challenge - to establish "Mardi Holding"
@@ -282,7 +258,7 @@ const About = React.memo(() => {
               }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed galaxy-fold:text-balanced tracking-normal mb-6">
+              <p className="text-base sm:text-lg font-primary md:text-xl text-left leading-relaxed galaxy-fold:text-balanced tracking-normal mb-6">
                 The holding daughter company "Imeri" is the first producer of
                 Georgian cigars. 29 sorts of cigars and cigarillas are produced
                 from tobacco leaves grown in Adjara, Keda.
@@ -296,7 +272,7 @@ const About = React.memo(() => {
               }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal">
+              <p className="text-base sm:text-lg font-primary md:text-xl text-left leading-relaxed tracking-normal">
                 The outstanding brand of the company is "Adjara Wine House", a
                 chateau-type restaurant, which includes a winery, enotheque,
                 ethnographic museum, cellar, and a restaurant. Here, in the
@@ -338,7 +314,7 @@ const About = React.memo(() => {
             Construction & Development
           </motion.h2>
           <motion.p
-            className="text-base sm:w-full lg:w-1/2 sm:text-lg md:text-xl text-left leading-relaxed tracking-normal mb-8"
+            className="text-base font-primary sm:w-full lg:w-1/2 sm:text-lg md:text-xl text-left leading-relaxed tracking-normal mb-8"
             variants={{
               hidden: { opacity: 0, y: 50 },
               visible: { opacity: 1, y: 0 },
@@ -384,7 +360,7 @@ const About = React.memo(() => {
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-left mb-6">
               Company Vision and Goals
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-left leading-relaxed tracking-normal mb-6">
+            <p className="text-base font-primary sm:text-lg md:text-xl text-left leading-relaxed tracking-normal mb-6">
               Mardi Holding is led by a young, creative and professional team,
               which aims to offer customers a big variety of quality products.
               Our starting point is the protection of the environment and the
@@ -403,7 +379,7 @@ const About = React.memo(() => {
           transition={{ duration: 0.3 }}
         >
           <Link href="/contact" passHref>
-            <span className="text-white tracking-normal leading-relaxed px-10 py-4 text-lg font-semi-bold">
+            <span className="text-white font-primary tracking-normal leading-relaxed px-10 py-4 text-lg font-semi-bold">
               Contact Us
             </span>
           </Link>

@@ -97,7 +97,7 @@ const Contact = () => {
           transition={{ duration: 1, ease: "easeOut" }}
         >
           <motion.h1
-            className="text-4xl md:text-5xl font-bold uppercase mb-2 md:mb-4"
+            className="text-4xl md:text-5xl font-primary tracking-wide font-bold uppercase mb-2 md:mb-4"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
@@ -105,7 +105,7 @@ const Contact = () => {
             Contact Us
           </motion.h1>
           <motion.p
-            className="mt-2 md:mt-4 text-lg md:text-xl"
+            className="mt-2 md:mt-4 text-lg primary md:text-xl"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
@@ -121,7 +121,7 @@ const Contact = () => {
           {/* Left Column - Head Office */}
           <div className="w-full mt-20 md:w-1/2 mb-10 md:mb-0">
             <motion.h2
-              className="text-2xl md:text-3xl text-[#333333] font-bold mb-4"
+              className="text-2xl md:text-3xl font-primary text-[#333333] font-bold mb-4"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.8 }}
@@ -129,7 +129,7 @@ const Contact = () => {
               Head Office
             </motion.h2>
             <motion.p
-              className="text-base md:text-lg"
+              className="text-base font-primary md:text-lg"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1 }}
@@ -137,7 +137,7 @@ const Contact = () => {
               Mardi Holding
             </motion.p>
             <motion.p
-              className="text-base md:text-lg"
+              className="text-base font-primary md:text-lg"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1.2 }}
@@ -145,7 +145,7 @@ const Contact = () => {
               Batumi, Georgia
             </motion.p>
             <motion.p
-              className="mt-4 text-base md:text-lg"
+              className="mt-4 text-base font-primary md:text-lg"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1.4 }}
@@ -199,7 +199,7 @@ const Contact = () => {
           <div className="w-full mt-20 md:w-1/2">
             <div className="w-8/12 mx-auto">
             <motion.h2
-              className="text-2xl md:text-3xl text-[#333333] font-bold  mb-4"
+              className="text-2xl md:text-3xl font-primary text-[#333333] font-bold  mb-4"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: "easeOut", delay: 1 }}

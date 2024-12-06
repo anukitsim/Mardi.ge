@@ -13,22 +13,22 @@ export default function Header() {
         className="h-6 sm:h-7 md:h-8"
       />
     </Link>
-    <nav className="flex space-x-4 sm:space-x-6 md:space-x-10">
+    <nav className="flex font-primary space-x-4 sm:space-x-6 md:space-x-10">
       <Link
         href="/contact"
-        className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all hover:after:w-full"
+        className="relative drop-shadow-md transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all hover:after:w-full"
       >
         Contact
       </Link>
       <Link
         href="/about"
-        className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all hover:after:w-full"
+        className="relative drop-shadow-md transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all hover:after:w-full"
       >
         About Us
       </Link>
       <Link
         href="/Chat"
-        className="relative transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all hover:after:w-full"
+        className="relative drop-shadow-md transition-colors duration-200 font-bold text-xs sm:text-sm md:text-base after:content-[''] after:absolute after:left-0 after:bottom-[-3px] after:h-[2px] after:w-0 after:bg-current after:transition-all hover:after:w-full"
       >
         Chat with us
       </Link>
